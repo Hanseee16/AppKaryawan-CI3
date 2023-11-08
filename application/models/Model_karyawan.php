@@ -102,6 +102,18 @@ class Model_karyawan extends CI_Model
         $this->db->where('id', $id);
         $this->db->delete('karyawan');
     }
+    
+    // untuk mendapatkan nama file foto berdasarkan ID karyawan
+    public function getFotoById($id)
+    {
+        $this->db->select('foto');
+        $this->db->from('karyawan');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        return $result ? $result->foto : null;
+    }
 
     // tambah data karyawan
     public function tambahDataKaryawan()

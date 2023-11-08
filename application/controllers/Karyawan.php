@@ -42,15 +42,29 @@ class Karyawan extends CI_Controller
     // hapus data karyawan
     public function hapus($id)
     {
+        // Dapatkan nama file foto sebelum menghapus data karyawan
+        $foto = $this->Model_karyawan->getFotoById($id);
+
+        // Hapus data karyawan
         $this->Model_karyawan->hapusDataKaryawan($id);
+
+        // Hapus file foto dari penyimpanan
+        if (!empty($foto)) {
+            $pathToFile = './assets/img/upload/' . $foto;
+            if (file_exists($pathToFile)) {
+                
+                // Hapus file dari penyimpanan
+                unlink($pathToFile); 
+            }
+        }
+
         $this->session->set_flashdata('flash', 
         '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		Data karyawan <strong>Berhasil</strong> dihapus
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;
-				</span>
-			</button>
-		</div>');
+            Data karyawan <strong>Berhasil</strong> dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>');
         redirect('karyawan/data_karyawan');
     }
 

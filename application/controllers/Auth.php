@@ -54,7 +54,7 @@ class Auth extends CI_Controller
                 // tidak password salah
                 $this->session->set_flashdata('message', 
                 '<div class="alert alert-danger" role="alert">
-                    <strong>Maaf!</strong> Password salah.
+                    <strong>Maaf,</strong> password salah.
                 </div>');
                 redirect('auth');
             }
@@ -80,7 +80,7 @@ class Auth extends CI_Controller
             'valid_email'   => '%s tidak valid',
             'is_unique'     => 'Maaf, %s sudah terdaftar'
         ]);
-        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[5]|matches[password2]', [
+        $this->form_validation->set_rules('password1', 'password', 'required|trim|min_length[5]|matches[password2]', [
             'matches'       => 'Maaf, %s tidak sesuai',
             'min_length'    => '%s minimal 5 karakter',
             'required'      => '%s belum diisi'
@@ -105,7 +105,7 @@ class Auth extends CI_Controller
             $this->db->insert('user', $data);
             $this->session->set_flashdata('message', 
             '<div class="alert alert-success" role="alert">
-                <strong>Selamat!</strong> Pendaftaran berhasil.
+                Registrasi akun <strong>Berhasil</strong>. Silahkan login!
             </div>');
             redirect('auth');
         }

@@ -25,7 +25,7 @@
 
     <!-- Nav Item - Charts -->
     <li
-        class="nav-item  <?php if ($this->uri->segment(1) == 'karyawan/data_karyawan' && $this->uri->segment(2) == '') echo 'active' ?>">
+        class="nav-item  <?php if ($this->uri->segment(2) == 'data_karyawan' && $this->uri->segment(3) == '') echo 'active' ?>">
         <a class="nav-link" href="<?= base_url('karyawan/data_karyawan') ?>">
             <i class="bi bi-person-fill"></i>
             <span>Data Karyawan</span></a>
@@ -34,7 +34,7 @@
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('auth/logout') ?>" onclick="showConfirmDialog(event)">
             <i class="bi bi-box-arrow-in-left"></i>
-            <span>Logout</span>
+            <span>Keluar</span>
         </a>
     </li>
 

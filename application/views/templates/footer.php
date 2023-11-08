@@ -157,13 +157,13 @@ function showConfirmDialog(event) {
     event.preventDefault();
 
     Swal.fire({
-        title: 'Yakin ingin logout?',
+        title: 'Yakin ingin keluara?',
         text: 'Anda akan keluar dari sesi saat ini.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout!',
+        confirmButtonText: 'Ya, Keluar!',
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
