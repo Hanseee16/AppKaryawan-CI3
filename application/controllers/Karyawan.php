@@ -39,33 +39,28 @@ class Karyawan extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    // hapus data karyawan
-    public function hapus($id)
+    // rules tambah data
+    public function rulesTambah()
     {
-        // Dapatkan nama file foto sebelum menghapus data karyawan
-        $foto = $this->Model_karyawan->getFotoById($id);
-
-        // Hapus data karyawan
-        $this->Model_karyawan->hapusDataKaryawan($id);
-
-        // Hapus file foto dari penyimpanan
-        if (!empty($foto)) {
-            $pathToFile = './assets/img/upload/' . $foto;
-            if (file_exists($pathToFile)) {
-                
-                // Hapus file dari penyimpanan
-                unlink($pathToFile); 
-            }
-        }
-
-        $this->session->set_flashdata('flash', 
-        '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Data karyawan <strong>Berhasil</strong> dihapus
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>');
-        redirect('karyawan/data_karyawan');
+        // rules validasi
+        $this->form_validation->set_rules('nama', 'Nama', 'required', [
+            'required'      => '%s belum diisi'
+        ]);
+        $this->form_validation->set_rules('nik', 'NIK', 'required|min_length[8]|max_length[8]|is_unique[karyawan.nik]', [
+            'required'      => '%s belum diisi',
+            'min_length'    => '%s tidak boleh kurang 8 karakter',
+            'max_length'    => '%s tidak boleh lebih 8 karakter',
+            'is_unique'     => 'Maaf, %s sudah digunakan!'
+        ]);
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
+            'required'      => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
+            'required'      => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
+            'required'      => '%s belum dipilih'
+        ]);
     }
 
     // tambah data karyawan
@@ -112,6 +107,27 @@ class Karyawan extends CI_Controller
         }
     }
 
+    // Rules validasi edit data
+    public function rulesEdit()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'required', [
+            'required'     => '%s belum diisi!'
+        ]);
+        $this->form_validation->set_rules('nik', 'NIK', 'required|exact_length[8]', [
+            'required'     => '%x belum diisi!',
+            'exact_length' => '%x harus terdiri dari 8 digit!'
+        ]);
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+    }
+
     // edit data karyawan
     public function edit($id)
     {
@@ -144,6 +160,35 @@ class Karyawan extends CI_Controller
         }
     }
 
+    // hapus data karyawan
+    public function hapus($id)
+    {
+        // Dapatkan nama file foto sebelum menghapus data karyawan
+        $foto = $this->Model_karyawan->getFotoById($id);
+
+        // Hapus data karyawan
+        $this->Model_karyawan->hapusDataKaryawan($id);
+
+        // Hapus file foto dari penyimpanan
+        if (!empty($foto)) {
+            $pathToFile = './assets/img/upload/' . $foto;
+            if (file_exists($pathToFile)) {
+                
+                // Hapus file dari penyimpanan
+                unlink($pathToFile); 
+            }
+        }
+
+        $this->session->set_flashdata('flash', 
+        '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Data karyawan <strong>Berhasil</strong> dihapus
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>');
+        redirect('karyawan/data_karyawan');
+    }
+
     // server side
     public function getData() {
         $results = $this->Model_karyawan->getDataTable();
@@ -167,56 +212,12 @@ class Karyawan extends CI_Controller
         }
 
         $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->Model_karyawan->count_all_data(),
-            "recordsFiltered" => $this->Model_karyawan->count_filter_data(),
-            "data" => $data,
+            "draw"              => $_POST['draw'],
+            "recordsTotal"      => $this->Model_karyawan->count_all_data(),
+            "recordsFiltered"   => $this->Model_karyawan->count_filter_data(),
+            "data"              => $data,
         );
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
-    }
-
-    public function rulesTambah()
-    {
-        // rules validasi
-        $this->form_validation->set_rules('nama', 'Nama', 'required', [
-            'required' => '%s belum diisi'
-        ]);
-        $this->form_validation->set_rules('nik', 'NIK', 'required|min_length[8]|max_length[8]|is_unique[karyawan.nik]', [
-            'required'   => '%s belum diisi',
-            'min_length' => '%s tidak boleh kurang 8 karakter',
-            'max_length' => '%s tidak boleh lebih 8 karakter',
-            'is_unique'  => 'Maaf, %s sudah digunakan!'
-        ]);
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
-    }
-
-    // Rules validasi
-    public function rulesEdit()
-    {
-        $this->form_validation->set_rules('nama', 'Nama', 'required', [
-            'required'     => '%s belum diisi!'
-        ]);
-        $this->form_validation->set_rules('nik', 'NIK', 'required|exact_length[8]', [
-            'required'     => '%x belum diisi!',
-            'exact_length' => '%x harus terdiri dari 8 digit!'
-        ]);
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
-            'required' => '%s belum dipilih'
-        ]);
     }
 }

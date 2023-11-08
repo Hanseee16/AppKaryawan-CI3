@@ -2,9 +2,9 @@
 class Model_karyawan extends CI_Model
 {
     // datatables server side
-    var $table = 'karyawan';
-    var $column_order = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
-    var $order = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
+    var $table          = 'karyawan';
+    var $column_order   = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
+    var $order          = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
 
     private function _get_data_query() {
         $this->db->from($this->table);
@@ -15,8 +15,8 @@ class Model_karyawan extends CI_Model
             $this->db->like('nama', $_POST['search']['value']);
             $this->db->or_like('nik', $_POST['search']['value']);
             $this->db->or_like('jenis_kelamin', $_POST['search']['value']);
-            $this->db->or_like('divisi.id_divisi', $_POST['search']['value']);
-            $this->db->or_like('unit.id_unit', $_POST['search']['value']);
+            $this->db->or_like('divisi.nama_divisi', $_POST['search']['value']);
+            $this->db->or_like('unit.nama_unit', $_POST['search']['value']);
             $this->db->or_like('foto', $_POST['search']['value']);
         }
 

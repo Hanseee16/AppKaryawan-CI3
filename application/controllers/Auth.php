@@ -99,7 +99,7 @@ class Auth extends CI_Controller
             $data = [
                 'nama'      => htmlspecialchars($this->input->post('nama', true)),
                 'email'     => htmlspecialchars($this->input->post('email', true)),
-                'password'  => password_hash($this->input->post('password1'), PASSWORD_DEFAULT)
+                'password'  => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
             ];
 
             $this->db->insert('user', $data);
