@@ -24,7 +24,7 @@
                 <div class="form-group mb-3">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
                     <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
-                        <option selected>Pilih Jenis Kelamin</option>
+                        <option selected>Pilih</option>
                         <?php
                                 foreach ($jenis_kelamin as $jk) { ?>
                         <?php if ($jk == $karyawan['jenis_kelamin']) : ?>
@@ -38,7 +38,7 @@
                 <div class="form-group mb-3">
                     <label for="id_divisi">Divisi</label>
                     <select class="form-control" name="id_divisi" id="id_divisi">
-                        <option selected>Pilih Divisi</option>
+                        <option selected>Pilih</option>
                         <?php foreach ($divisi as $key => $value) { ?>
                         <option value="<?= $value['id_divisi'] ?>"
                             <?= $value['id_divisi'] == $karyawan['id_divisi'] ? 'selected' : '' ?>>
@@ -50,7 +50,7 @@
                 <div class="form-group mb-3">
                     <label for="id_unit">Unit</label>
                     <select class="form-control" name="id_unit" id="id_unit">
-                        <option selected>Pilih Unit</option>
+                        <option selected>Pilih</option>
                         <?php foreach ($unit as $key => $value) { ?>
                         <option value="<?= $value['id_unit'] ?>"
                             <?= $value['id_unit'] == $karyawan['id_unit'] ? 'selected' : '' ?>>
@@ -70,7 +70,7 @@
                     <img src="<?= base_url('./assets/img/upload/' . $karyawan['foto']) ?>" id="gambar_load" width="250">
                 </div>
                 <button type="submit" class="btn btn-primary" name="edit">Edit</button>
-                <a href="<?= base_url('karyawan') ?>" class="btn btn-danger">Kembali</a>
+                <a href="<?= base_url('karyawan/data_karyawan') ?>" class="btn btn-danger">Kembali</a>
             </form>
         </div>
     </div>

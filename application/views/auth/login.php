@@ -1,7 +1,5 @@
 <body class="bg-gradient-primary">
-
     <div class="container">
-
         <!-- Outer Row -->
         <div class="row justify-content-center"
             style="display: flex; justify-content: center; align-items: center; height: 100vh;">

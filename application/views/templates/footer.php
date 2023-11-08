@@ -66,6 +66,43 @@
 <!-- sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- server side -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- server side -->
+<script>
+$(document).ready(function() {
+    var table = $('#example').DataTable({
+        search: {
+            return: true
+        },
+        "processing": true,
+        "serverSide": true,
+        "order": [],
+        "ajax": {
+            "url": "<?= base_url('karyawan/getData'); ?>",
+            "type": "POST"
+        },
+        "aLengthMenu": [
+            [10, 20, 50],
+            [10, 20, 50]
+        ],
+        "columnDefs": [{
+            "target": [-1],
+            "orderable": false
+        }]
+    });
+
+    $(document).on('keypress', function(e) {
+        if (e.which === 13) {
+            table.search('').draw();
+        }
+    });
+});
+</script>
+
 <!-- sweet alert delete data karyawan -->
 <script>
 function hapusData(event, url) {

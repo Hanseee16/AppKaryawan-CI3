@@ -13,11 +13,11 @@ class Auth extends CI_Controller
     public function index()
     {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', [
-            'required'      => '%s belum diisi!',
-            'valid_email'   => '%s tidak valid!'
+            'required'      => '%s belum diisi',
+            'valid_email'   => '%s tidak valid'
         ]);
         $this->form_validation->set_rules('password', 'Password', 'trim|required', [
-            'required'      => '%s belum diisi!'
+            'required'      => '%s belum diisi'
         ]);
 
         if ($this->form_validation->run() == false) {
@@ -25,7 +25,6 @@ class Auth extends CI_Controller
             $data['title'] = 'Login Page';
             $this->load->view('templates/header', $data);
             $this->load->view('auth/login');
-            // $this->load->view('templates/footer');
         } else {
 
             // validasi sukses
@@ -49,7 +48,7 @@ class Auth extends CI_Controller
                 ];
 
                 $this->session->set_userdata($data);
-                redirect('dashboard');
+                redirect('karyawan');
             } else {
 
                 // tidak password salah
@@ -95,7 +94,7 @@ class Auth extends CI_Controller
 
             $this->load->view('templates/header', $data);
             $this->load->view('auth/register');
-            // $this->load->view('templates/footer');
+            
         } else {
             $data = [
                 'nama'      => htmlspecialchars($this->input->post('nama', true)),
@@ -116,7 +115,7 @@ class Auth extends CI_Controller
     {
         $this->session->unset_userdata('email');
         $this->session->set_flashdata('message', 
-        '<div class="alert alert-success" role="alert">
+        '<div class="alert alert-danger" role="alert">
             <strong>Berhasil keluar!</strong>
         </div>');
         redirect('auth');

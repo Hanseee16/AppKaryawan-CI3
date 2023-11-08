@@ -8,8 +8,8 @@
 
     <!-- Nav Item - Dashboard -->
     <li
-        class="nav-item <?php if ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == '') echo 'active' ?>">
-        <a class="nav-link" href="<?= base_url('dashboard') ?>">
+        class="nav-item <?php if ($this->uri->segment(1) == 'karyawan' && $this->uri->segment(2) == '') echo 'active' ?>">
+        <a class="nav-link" href="<?= base_url('karyawan') ?>">
             <i class="bi bi-house-door-fill"></i>
             <span>Dashboard</span>
         </a>
@@ -25,8 +25,8 @@
 
     <!-- Nav Item - Charts -->
     <li
-        class="nav-item  <?php if ($this->uri->segment(1) == 'karyawan' && $this->uri->segment(2) == '') echo 'active' ?>">
-        <a class="nav-link" href="<?= base_url('karyawan') ?>">
+        class="nav-item  <?php if ($this->uri->segment(1) == 'karyawan/data_karyawan' && $this->uri->segment(2) == '') echo 'active' ?>">
+        <a class="nav-link" href="<?= base_url('karyawan/data_karyawan') ?>">
             <i class="bi bi-person-fill"></i>
             <span>Data Karyawan</span></a>
     </li>
@@ -37,9 +37,6 @@
             <span>Logout</span>
         </a>
     </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

@@ -14,43 +14,61 @@
                     <label for="nama">Nama</label>
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama"
                         value="<?= set_value('nama') ?>">
-                    <?= form_error('nama', '<small class="text-danger pl-3">', '</small>'); ?>
+                    <small class="text-danger"><?= form_error('nama') ?></small>
                 </div>
                 <div class="form-group mb-3">
                     <label for="nik">NIK</label>
                     <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukkan NIK"
                         value="<?= set_value('nik') ?>">
-                    <?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
+                    <small class="text-danger"><?= form_error('nik') ?></small>
                 </div>
                 <div class="form-group mb-3">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
                     <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
-                        <option selected>Pilih Jenis Kelamin</option>
+
+                        <!-- <option selected>Pilih Jenis Kelamin</option>
                         <option value="Pria" <?= set_select('jenis_kelamin', 'Pria'); ?>>Pria</option>
-                        <option value="Wanita" <?= set_select('jenis_kelamin', 'Wanita'); ?>>Wanita</option>
+                        <option value="Wanita" <?= set_select('jenis_kelamin', 'Wanita'); ?>>Wanita</option> -->
+
+                        <option value="" <?= set_select('jenis_kelamin', '', TRUE) ?>>Pilih</option>
+                        <option value="Pria" <?= set_select('jenis_kelamin', 'Pria') ?>>Pria</option>
+                        <option value="Wanita" <?= set_select('jenis_kelamin', 'Wanita') ?>>Wanita</option>
                     </select>
+                    <small class="text-danger"><?= form_error('jenis_kelamin') ?></small>
                 </div>
                 <div class="form-group mb-3">
                     <label for="id_divisi">Divisi</label>
                     <select class="form-control" name="id_divisi" id="id_divisi">
-                        <option value="">Pilih Divisi</option>
+
+                        <!-- <option value="">Pilih Divisi</option>
                         <?php foreach ($divisi as $key => $value) { ?>
                         <option value="<?= $value['id_divisi'] ?>" <?= set_select('id_divisi', $value['id_divisi']); ?>>
                             <?= $value['nama_divisi'] ?>
                         </option>
-                        <?php } ?>
+                        <?php } ?> -->
+
+                        <option value="" <?= set_select('id_divisi', '', TRUE) ?>>Pilih</option>
+                        <option value="1" <?= set_select('id_divisi', '1') ?>>Divisi-1</option>
+                        <option value="2" <?= set_select('id_divisi', '2') ?>>Divisi-2</option>
                     </select>
+                    <small class="text-danger"><?= form_error('id_divisi') ?></small>
                 </div>
                 <div class="form-group mb-3">
                     <label for="id_unit">Unit</label>
                     <select class="form-control" name="id_unit" id="id_unit">
-                        <option value="">Pilih Unit</option>
+
+                        <!-- <option value="">Pilih Unit</option>
                         <?php foreach ($unit as $key => $value) { ?>
                         <option value="<?= $value['id_unit'] ?>" <?= set_select('id_unit', $value['id_unit']) ?>>
                             <?= $value['nama_unit'] ?>
                         </option>
-                        <?php } ?>
+                        <?php } ?> -->
+
+                        <option value="" <?= set_select('id_unit', '', TRUE) ?>>Pilih</option>
+                        <option value="1" <?= set_select('id_unit', '1') ?>>Unit-1</option>
+                        <option value="2" <?= set_select('id_unit', '2') ?>>Unit-2</option>
                     </select>
+                    <small class="text-danger"><?= form_error('id_unit') ?></small>
                 </div>
                 <div class="form-group mb-3">
                     <label>Foto</label>
