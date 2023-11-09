@@ -3,8 +3,8 @@ class Model_karyawan extends CI_Model
 {
     // datatables server side
     var $table          = 'karyawan';
-    var $column_order   = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
-    var $order          = array('id', 'nama', 'nik', 'jenis_kelamin', 'id_divisi', 'id_unit', 'foto');
+    var $column_order   = array('id', 'nama', 'nik', 'jenis_kelamin', 'nama_divisi', 'nama_unit', 'foto');
+    var $order          = array('id', 'nama', 'nik', 'jenis_kelamin', 'nama_divisi', 'nama_unit', 'foto');
 
     private function _get_data_query() {
         $this->db->from($this->table);

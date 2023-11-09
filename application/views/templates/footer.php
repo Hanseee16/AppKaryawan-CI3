@@ -94,12 +94,6 @@ $(document).ready(function() {
             "orderable": false
         }]
     });
-
-    $(document).on('keypress', function(e) {
-        if (e.which === 13) {
-            table.search('').draw();
-        }
-    });
 });
 </script>
 
