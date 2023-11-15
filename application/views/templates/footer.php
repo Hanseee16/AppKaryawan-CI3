@@ -71,10 +71,10 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
 
-<!-- server side -->
+<!-- server side data karyawan -->
 <script>
 $(document).ready(function() {
-    var table = $('#example').DataTable({
+    var table = $('#data_karyawan').DataTable({
         search: {
             return: true
         },
@@ -82,7 +82,7 @@ $(document).ready(function() {
         "serverSide": true,
         "order": [],
         "ajax": {
-            "url": "<?= base_url('karyawan/getData'); ?>",
+            "url": "<?= base_url('karyawan/getDataKaryawan'); ?>",
             "type": "POST"
         },
         "aLengthMenu": [
@@ -97,50 +97,47 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- sweet alert delete data karyawan -->
+<!-- server side data gaji karyawan -->
 <script>
-function hapusData(event, url) {
-
-    // Menghentikan tindakan default dari tautan
-    event.preventDefault();
-
-    Swal.fire({
-        title: 'Konfirmasi Hapus',
-        text: 'Yakin ingin menghapus data ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            // Jika pengguna mengkonfirmasi, lanjutkan ke URL penghapusan
-            window.location.href = url;
-        }
+$(document).ready(function() {
+    var table = $('#data_gaji').DataTable({
+        search: {
+            return: true
+        },
+        "processing": true,
+        "serverSide": true,
+        "order": [],
+        "ajax": {
+            "url": "<?= base_url('karyawan/getDataGaji'); ?>",
+            "type": "POST"
+        },
+        "aLengthMenu": [
+            [10, 20, 50],
+            [10, 20, 50]
+        ],
+        "columnDefs": [{
+            "target": [-1],
+            "orderable": false
+        }]
     });
-}
+});
 </script>
 
-<!-- sweet alert edit data karyawan -->
+<!-- validasi gaji -->
 <script>
-function editConfirmation(event, id) {
-    event.preventDefault();
-    Swal.fire({
-        title: 'Konfirmasi Edit Data',
-        text: 'Yakin ingin mengedit data ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Edit!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect to the edit page if confirmed
-            window.location.href = "<?= base_url('karyawan/edit/') ?>" + id;
-        }
-    });
-}
+document.getElementById('gaji').addEventListener('input', function(e) {
+    // Mengambil nilai yang dimasukkan
+    let gaji = e.target.value;
+
+    // Menghilangkan tanda titik jika ada
+    gaji = gaji.replace(/\./g, '');
+
+    // Menambahkan titik setiap 3 digit dari belakang
+    gaji = gaji.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Memasukkan nilai yang sudah diformat kembali ke input
+    e.target.value = gaji;
+});
 </script>
 
 <!-- sweet alert logout -->

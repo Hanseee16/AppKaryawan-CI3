@@ -7,6 +7,8 @@ class Karyawan extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Model_karyawan');
+        $this->load->model('Model_serverside_karyawan');
+        $this->load->model('Model_serverside_gaji');
     }
 
     public function index()
@@ -30,7 +32,7 @@ class Karyawan extends CI_Controller
     {
         $data['title']      = 'Data Karyawan';
         $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['karyawan']   = $this->Model_karyawan->getAllKaryawan();
+        // $data['karyawan']   = $this->Model_karyawan->getAllKaryawan();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
@@ -39,10 +41,22 @@ class Karyawan extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    // rules tambah data
-    public function rulesTambah()
+    // view data gaji karyawan
+    public function data_gaji()
     {
-        // rules validasi
+        $data['title']      = 'Data Gaji Karyawan';
+        $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar');
+        $this->load->view('karyawan/data_gaji', $data);
+        $this->load->view('templates/footer');
+    }
+
+    // rules tambah data
+    public function rulesTambahKaryawan()
+    {
         $this->form_validation->set_rules('nama', 'Nama', 'required', [
             'required'      => '%s belum diisi'
         ]);
@@ -64,21 +78,21 @@ class Karyawan extends CI_Controller
     }
 
     // tambah data karyawan
-    public function tambah()
+    public function tambah_karyawan()
     {
         $data['title']    = 'Tambah Data Karyawan';
         $data['divisi']   = $this->Model_karyawan->getAllDivisi();
         $data['unit']     = $this->Model_karyawan->getAllUnit();
         $data['user']     = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-       $this->rulesTambah();
+       $this->rulesTambahKaryawan();
 
         // validasi tambah data
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar');
             $this->load->view('templates/topbar', $data);
-            $this->load->view('karyawan/tambah', $data);
+            $this->load->view('karyawan/tambah_karyawan', $data);
             $this->load->view('templates/footer');
         } else {
             if ($this->Model_karyawan->tambahDataKaryawan() == true) {
@@ -101,9 +115,50 @@ class Karyawan extends CI_Controller
 						</span>
 					</button>
 				</div>');
-                redirect('karyawan/tambah');
+                redirect('karyawan/data_karyawan');
                 
             }
+        }
+    }
+
+    // rules tambah gaji
+    public function rulesTambahGaji()
+    {
+        $this->form_validation->set_rules('gaji', 'Gaji', 'required', [
+            'required'      => '%s belum diisi'
+        ]);       
+    }
+
+    // tambah data gaji karyawan
+    public function tambah_gaji()
+    {   
+        $data['title']      = 'Tambah Data Gaji';
+        $data['karyawan']   = $this->Model_karyawan->getAllKaryawan();
+        $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->rulesTambahGaji();
+    
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar');
+            $this->load->view('templates/topbar');
+            $this->load->view('karyawan/tambah_gaji', $data);
+            $this->load->view('templates/footer');
+        
+        } else {
+            $id     = $this->input->post('nama');
+            $gaji   = str_replace('.', '', $this->input->post('gaji'));
+        
+            $this->Model_karyawan->tambahDataGaji($id, $gaji);
+            $this->session->set_flashdata('flash', 
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data gaji karyawan <strong>Berhasil</strong> ditambahkan
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
+            
+            redirect('karyawan/data_gaji');
         }
     }
 
@@ -129,7 +184,7 @@ class Karyawan extends CI_Controller
     }
 
     // edit data karyawan
-    public function edit($id)
+    public function edit_karyawan($id)
     {
         $data['title']          = 'Edit Data Karyawan';
         $data['karyawan']       = $this->Model_karyawan->getKaryawanById($id);
@@ -140,12 +195,11 @@ class Karyawan extends CI_Controller
 
         $this->rulesEdit();
 
-        // Validasi edit data
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar');
             $this->load->view('templates/topbar');
-            $this->load->view('karyawan/edit', $data);
+            $this->load->view('karyawan/edit_karyawan', $data);
             $this->load->view('templates/footer');
         } else {
             $this->Model_karyawan->editDataKaryawan($id);
@@ -159,9 +213,39 @@ class Karyawan extends CI_Controller
             redirect('karyawan/data_karyawan');
         }
     }
+    
+    // edit data gaji karyawan
+    public function edit_gaji($nik)
+    {   
+        $data['title']      = 'Edit Data Gaji Karyawan';
+        $data['karyawan']   = $this->Model_karyawan->getKaryawanByNik($nik);
+        $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->rulesTambahGaji();
+    
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar');
+            $this->load->view('templates/topbar');
+            $this->load->view('karyawan/edit_gaji', $data);
+            $this->load->view('templates/footer');
+        
+        } else {  
+            $this->Model_karyawan->editDataGaji($nik, $gaji);
+            $this->session->set_flashdata('flash', 
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Data gaji karyawan <strong>Berhasil</strong> diubah
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
+            
+            redirect('karyawan/data_gaji');
+        }
+    }
 
     // hapus data karyawan
-    public function hapus($id)
+    public function hapus_karyawan($id)
     {
         // Dapatkan nama file foto sebelum menghapus data karyawan
         $foto = $this->Model_karyawan->getFotoById($id);
@@ -189,9 +273,9 @@ class Karyawan extends CI_Controller
         redirect('karyawan/data_karyawan');
     }
 
-    // server side
-    public function getData() {
-        $results = $this->Model_karyawan->getDataTable();
+    // server side data karyawan
+    public function getDataKaryawan() {
+        $results = $this->Model_serverside_karyawan->getDataTable();
         $data = [];
         $no = $_POST['start'];
         foreach ($results as $result) {
@@ -204,8 +288,8 @@ class Karyawan extends CI_Controller
             $row[] = '<div class="text-center">' . $result->nama_unit . '</div>';
             $row[] = '<div class="text-center"><img src="' . base_url('./assets/img/upload/' . $result->foto) . '" width="100"></div>';
             $row[] = '<div class="text-center">
-            <a href="'.base_url('karyawan/edit/'.$result->id).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>
-            <a href="'.base_url('karyawan/hapus/'.$result->id).'" class="btn btn-danger" onclick="return confirm(\'Apakah Anda yakin untuk menghapus data ini?\')"><i class="bi bi-trash3-fill"></i></a>
+            <a href="'.base_url('karyawan/edit_karyawan/'.$result->id).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>
+            <a href="'.base_url('karyawan/hapus_karyawan/'.$result->id).'" class="btn btn-danger" onclick="return confirm(\'Apakah Anda yakin untuk menghapus data ini?\')"><i class="bi bi-trash3-fill"></i></a>
             </div>';
             
             $data[] = $row;
@@ -213,11 +297,43 @@ class Karyawan extends CI_Controller
 
         $output = array(
             "draw"              => $_POST['draw'],
-            "recordsTotal"      => $this->Model_karyawan->count_all_data(),
-            "recordsFiltered"   => $this->Model_karyawan->count_filter_data(),
+            "recordsTotal"      => $this->Model_serverside_karyawan->count_all_data(),
+            "recordsFiltered"   => $this->Model_serverside_karyawan->count_filter_data(),
             "data"              => $data,
         );
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
+
+    // server side data gaji karyawan
+    public function getDataGaji() {
+        $results = $this->Model_serverside_gaji->getDataTable();
+        $data = [];
+        $no = $_POST['start'];
+        foreach ($results as $result) {
+
+            // kondisi untuk memeriksa nilai gaji, jika ada ditampilkan jika tidak ada tidak ditampilkan
+            if ($result->gaji !== null) { 
+                $row = array();
+                $row[] = '<div class="text-center">' . ++$no . '</div>';
+                $row[] = '<div class="text-center">' . $result->nama . '</div>';
+                $row[] = '<div class="text-center">' . $result->nik . '</div>';
+                $row[] = '<div class="text-center">Rp ' . number_format($result->gaji, 0, ',', '.') . '</div>';
+                $row[] = '<div class="text-center">
+                <a href="'.base_url('karyawan/edit_gaji/'.$result->nik).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>';
+                
+                $data[] = $row;
+            }
+        }
+    
+        $output = array(
+            "draw"              => $_POST['draw'],
+            "recordsTotal"      => $this->Model_serverside_gaji->count_all_data(),
+            "recordsFiltered"   => $this->Model_serverside_gaji->count_filter_data(),
+            "data"              => $data,
+        );
+    
+        $this->output->set_content_type('application/json')->set_output(json_encode($output));
+    }
+    
 }

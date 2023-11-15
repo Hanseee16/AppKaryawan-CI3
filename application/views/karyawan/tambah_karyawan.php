@@ -25,11 +25,6 @@
                 <div class="form-group mb-3">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
                     <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
-
-                        <!-- <option selected>Pilih Jenis Kelamin</option>
-                        <option value="Pria" <?= set_select('jenis_kelamin', 'Pria'); ?>>Pria</option>
-                        <option value="Wanita" <?= set_select('jenis_kelamin', 'Wanita'); ?>>Wanita</option> -->
-
                         <option value="" <?= set_select('jenis_kelamin', '', TRUE) ?>>Pilih</option>
                         <option value="Pria" <?= set_select('jenis_kelamin', 'Pria') ?>>Pria</option>
                         <option value="Wanita" <?= set_select('jenis_kelamin', 'Wanita') ?>>Wanita</option>
@@ -39,14 +34,6 @@
                 <div class="form-group mb-3">
                     <label for="id_divisi">Divisi</label>
                     <select class="form-control" name="id_divisi" id="id_divisi">
-
-                        <!-- <option value="">Pilih Divisi</option>
-                        <?php foreach ($divisi as $key => $value) { ?>
-                        <option value="<?= $value['id_divisi'] ?>" <?= set_select('id_divisi', $value['id_divisi']); ?>>
-                            <?= $value['nama_divisi'] ?>
-                        </option>
-                        <?php } ?> -->
-
                         <option value="" <?= set_select('id_divisi', '', TRUE) ?>>Pilih</option>
                         <option value="1" <?= set_select('id_divisi', '1') ?>>Divisi-1</option>
                         <option value="2" <?= set_select('id_divisi', '2') ?>>Divisi-2</option>
@@ -56,14 +43,6 @@
                 <div class="form-group mb-3">
                     <label for="id_unit">Unit</label>
                     <select class="form-control" name="id_unit" id="id_unit">
-
-                        <!-- <option value="">Pilih Unit</option>
-                        <?php foreach ($unit as $key => $value) { ?>
-                        <option value="<?= $value['id_unit'] ?>" <?= set_select('id_unit', $value['id_unit']) ?>>
-                            <?= $value['nama_unit'] ?>
-                        </option>
-                        <?php } ?> -->
-
                         <option value="" <?= set_select('id_unit', '', TRUE) ?>>Pilih</option>
                         <option value="1" <?= set_select('id_unit', '1') ?>>Unit-1</option>
                         <option value="2" <?= set_select('id_unit', '2') ?>>Unit-2</option>
@@ -75,7 +54,7 @@
                     <input type="file" class="form-control" name="foto" id="preview_gambar" accept="image/*">
                 </div>
                 <button type="submit" class="btn btn-primary" name="tambah">Tambah</button>
-                <a href="<?= base_url('karyawan') ?>" class="btn btn-danger">Kembali</a>
+                <a href="<?= base_url('karyawan/data_karyawan') ?>" class="btn btn-danger">Kembali</a>
             </form>
         </div>
     </div>
