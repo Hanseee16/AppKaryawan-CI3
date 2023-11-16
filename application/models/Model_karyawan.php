@@ -48,6 +48,13 @@ class Model_karyawan extends CI_Model
         return $this->db->get('user')->num_rows();
     }
 
+    // jumlah data gaji karyawan
+    public function getJumlahDataGaji()
+    {
+        $this->db->where('gaji IS NOT NULL');
+        return $this->db->get('karyawan')->num_rows();
+    }
+
     // get data berdasarkan id
     public function getKaryawanById($id)
     {
@@ -117,6 +124,17 @@ class Model_karyawan extends CI_Model
     
         $this->db->where('id', $id);
         $this->db->update('karyawan', $data);
+    }
+
+    // cek nilai gaji berdasarkan ID
+    public function getGajiById($id)
+    {
+        $this->db->select('gaji');
+        $this->db->where('id', $id);
+        $query = $this->db->get('karyawan');
+
+        // Mengembalikan nilai gaji jika data ditemukan, atau null jika tidak ditemukan
+        return $query->row() ? $query->row()->gaji : null;
     }
 
     // edit data karyawan

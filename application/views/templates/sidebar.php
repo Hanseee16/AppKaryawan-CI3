@@ -20,7 +20,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Addons
+        interface
     </div>
 
     <!-- Nav Item - Charts -->

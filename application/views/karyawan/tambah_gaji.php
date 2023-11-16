@@ -21,7 +21,8 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="gaji">Gaji</label>
-                    <input type="text" class="form-control" name="gaji" id="gaji" placeholder="Masukkan gaji">
+                    <input type="text" class="form-control" name="gaji" id="gaji" placeholder="Masukkan gaji"
+                        value="<?= set_value('gaji') ?>">
                     <small class="text-danger"><?= form_error('gaji') ?></small>
                 </div>
                 <button type="submit" class="btn btn-primary" name="tambah">Tambah</button>

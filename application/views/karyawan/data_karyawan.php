@@ -19,7 +19,7 @@
             <table id="data_karyawan" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th class="text-center">No</th>
+                        <th class="text-center">No.</th>
                         <th class="text-center">Nama</th>
                         <th class="text-center">NIK</th>
                         <th class="text-center">Jenis Kelamin</th>

@@ -11,13 +11,14 @@ class Karyawan extends CI_Controller
         $this->load->model('Model_serverside_gaji');
     }
 
+    // view halaman index atau dashboard
     public function index()
     {
         $data['title']          = 'Dashboard';
         $data['jumlahKaryawan'] = $this->Model_karyawan->getJumlahKaryawan();
+        $data['jumlahGaji']     = $this->Model_karyawan->getJumlahDataGaji();
         $data['jumlahDivisi']   = $this->Model_karyawan->getJumlahDivisi();
         $data['jumlahUnit']     = $this->Model_karyawan->getJumlahUnit();
-        $data['jumlahUser']     = $this->Model_karyawan->getJumlahUser();
         $data['user']           = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('templates/header', $data);
@@ -131,11 +132,11 @@ class Karyawan extends CI_Controller
 
     // tambah data gaji karyawan
     public function tambah_gaji()
-    {   
+    {
         $data['title']      = 'Tambah Data Gaji';
         $data['karyawan']   = $this->Model_karyawan->getAllKaryawan();
         $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
+    
         $this->rulesTambahGaji();
     
         if ($this->form_validation->run() == false) {
@@ -144,21 +145,38 @@ class Karyawan extends CI_Controller
             $this->load->view('templates/topbar');
             $this->load->view('karyawan/tambah_gaji', $data);
             $this->load->view('templates/footer');
-        
         } else {
             $id     = $this->input->post('nama');
             $gaji   = str_replace('.', '', $this->input->post('gaji'));
         
-            $this->Model_karyawan->tambahDataGaji($id, $gaji);
-            $this->session->set_flashdata('flash', 
-            '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data gaji karyawan <strong>Berhasil</strong> ditambahkan
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>');
+            // Tambahan kondisi untuk mengecek apakah gaji null atau tidak
+            $cekNilaiGaji = $this->Model_karyawan->getGajiById($id);
+        
+            if ($cekNilaiGaji === null) {
+                // Jika gaji null, tambahkan data
+                $this->Model_karyawan->tambahDataGaji($id, $gaji);
+                $this->session->set_flashdata('flash',
+                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Gaji karyawan <strong>Berhasil</strong> ditambahkan
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>');
             
-            redirect('karyawan/data_gaji');
+                redirect('karyawan/data_gaji');
+            } else {
+                
+                // Jika gaji tidak null atau sudah ditambahkan
+                $this->session->set_flashdata('flash',
+                    '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                   <strong>Maaf,</strong>  gaji karyawan sudah pernah ditambahkan
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>');
+            
+                redirect('karyawan/tambah_gaji');
+            }
         }
     }
 
@@ -169,8 +187,8 @@ class Karyawan extends CI_Controller
             'required'     => '%s belum diisi!'
         ]);
         $this->form_validation->set_rules('nik', 'NIK', 'required|exact_length[8]', [
-            'required'     => '%x belum diisi!',
-            'exact_length' => '%x harus terdiri dari 8 digit!'
+            'required'     => '%s belum diisi!',
+            'exact_length' => '%s harus terdiri dari 8 digit!'
         ]);
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
             'required'     => '%s belum dipilih'
@@ -234,7 +252,7 @@ class Karyawan extends CI_Controller
             $this->Model_karyawan->editDataGaji($nik, $gaji);
             $this->session->set_flashdata('flash', 
             '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data gaji karyawan <strong>Berhasil</strong> diubah
+            Gaji karyawan <strong>Berhasil</strong> diubah
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -280,7 +298,7 @@ class Karyawan extends CI_Controller
         $no = $_POST['start'];
         foreach ($results as $result) {
             $row = array();
-            $row[] = '<div class="text-center">' . ++$no . '</div>';
+            $row[] = '<div class="text-center">' . ++$no . '.</div>';
             $row[] = '<div class="text-center">' . $result->nama . '</div>';
             $row[] = '<div class="text-center">' . $result->nik . '</div>';
             $row[] = '<div class="text-center">' . $result->jenis_kelamin . '</div>';
@@ -310,17 +328,25 @@ class Karyawan extends CI_Controller
         $results = $this->Model_serverside_gaji->getDataTable();
         $data = [];
         $no = $_POST['start'];
-        foreach ($results as $result) {
 
+        // variabel untuk menghitung jumlah karyawan dengan nilai gaji tidak null
+        $countGajiNotNull = 0;
+    
+        foreach ($results as $result) {
+    
             // kondisi untuk memeriksa nilai gaji, jika ada ditampilkan jika tidak ada tidak ditampilkan
             if ($result->gaji !== null) { 
+
+                // Increment jumlah karyawan dengan nilai gaji tidak null
+                $countGajiNotNull++; 
+    
                 $row = array();
-                $row[] = '<div class="text-center">' . ++$no . '</div>';
+                $row[] = '<div class="text-center">' . ++$no . '.</div>';
                 $row[] = '<div class="text-center">' . $result->nama . '</div>';
                 $row[] = '<div class="text-center">' . $result->nik . '</div>';
-                $row[] = '<div class="text-center">Rp ' . number_format($result->gaji, 0, ',', '.') . '</div>';
+                $row[] = '<div class="text-center">Rp. ' . number_format($result->gaji, 0, ',', '.') . ',-</div>';
                 $row[] = '<div class="text-center">
-                <a href="'.base_url('karyawan/edit_gaji/'.$result->nik).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>';
+                    <a href="'.base_url('karyawan/edit_gaji/'.$result->nik).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>';
                 
                 $data[] = $row;
             }
@@ -328,12 +354,15 @@ class Karyawan extends CI_Controller
     
         $output = array(
             "draw"              => $_POST['draw'],
-            "recordsTotal"      => $this->Model_serverside_gaji->count_all_data(),
-            "recordsFiltered"   => $this->Model_serverside_gaji->count_filter_data(),
+
+            // Mengganti jumlah total dengan jumlah karyawan nilai gajinya tidak null
+            "recordsTotal"      => $countGajiNotNull,
+
+            // Mengganti jumlah filtered dengan jumlah karyawan nilai gajinya tidak null
+            "recordsFiltered"   => $countGajiNotNull,
             "data"              => $data,
         );
     
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
-    
 }
