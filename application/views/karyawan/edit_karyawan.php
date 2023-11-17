@@ -13,13 +13,13 @@
                     <label for="nama">Nama</label>
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama"
                         value="<?= $karyawan['nama'] ?>">
-                    <?= form_error('nama', '<small class="text-danger pl-3">', '</small>'); ?>
+                    <?= form_error('nama', '<small class="text-danger pt-3">', '</small>'); ?>
                 </div>
                 <div class="form-group mb-3">
                     <label for="nik">NIK</label>
                     <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukkan NIK"
                         value="<?= $karyawan['nik'] ?>">
-                    <?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
+                    <?= form_error('nik', '<small class="text-danger pt-3">', '</small>'); ?>
                 </div>
                 <div class="form-group mb-3">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
@@ -62,7 +62,6 @@
                 <div class="form-group mb-3">
                     <label>Foto</label>
                     <input type="file" class="form-control" name="foto" id="preview_gambar" accept="image/*">
-                    <!-- <?= form_error('foto', '<small class="text-danger pl-3">', '</small>'); ?> -->
                 </div>
                 <div class="form-group mb-3">
                     <label>Preview Foto:</label>

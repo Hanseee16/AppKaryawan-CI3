@@ -123,7 +123,7 @@ class Karyawan extends CI_Controller
     }
 
     // rules tambah gaji
-    public function rulesTambahGaji()
+    public function rulesGaji()
     {
         $this->form_validation->set_rules('gaji', 'Gaji', 'required', [
             'required'      => '%s belum diisi'
@@ -137,7 +137,7 @@ class Karyawan extends CI_Controller
         $data['karyawan']   = $this->Model_karyawan->getAllKaryawan();
         $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
     
-        $this->rulesTambahGaji();
+        $this->rulesGaji();
     
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
@@ -169,7 +169,7 @@ class Karyawan extends CI_Controller
                 // Jika gaji tidak null atau sudah ditambahkan
                 $this->session->set_flashdata('flash',
                     '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                   <strong>Maaf,</strong>  gaji karyawan sudah pernah ditambahkan
+                    <strong>Maaf,</strong>  gaji karyawan sudah pernah ditambahkan
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -239,7 +239,7 @@ class Karyawan extends CI_Controller
         $data['karyawan']   = $this->Model_karyawan->getKaryawanByNik($nik);
         $data['user']       = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->rulesTambahGaji();
+        $this->rulesGaji();
     
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
@@ -247,7 +247,6 @@ class Karyawan extends CI_Controller
             $this->load->view('templates/topbar');
             $this->load->view('karyawan/edit_gaji', $data);
             $this->load->view('templates/footer');
-        
         } else {  
             $this->Model_karyawan->editDataGaji($nik, $gaji);
             $this->session->set_flashdata('flash', 

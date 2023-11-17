@@ -12,14 +12,13 @@
                 <div class="form-group mb-3">
                     <label for="nama">Nama</label>
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama"
-                        value="<?= $karyawan['nama'] ?>">
-                    <!-- <?= form_error('nama', '<small class="text-danger pl-3">', '</small>'); ?> -->
+                        value="<?= $karyawan['nama'] ?>" readonly>
                 </div>
                 <div class="form-group mb-3">
                     <label for="gaji">Gaji</label>
                     <input type="text" class="form-control" name="gaji" id="gaji" placeholder="Masukkan Gaji"
                         value="<?= $karyawan['gaji'] ?>">
-                    <!-- <?= form_error('gaji', '<small class="text-danger pl-3">', '</small>'); ?> -->
+                    <?= form_error('gaji', '<small class="text-danger pt-3">', '</small>'); ?>
                 </div>
                 <button type="submit" class="btn btn-primary" name="edit">Edit</button>
                 <a href="<?= base_url('karyawan/data_gaji') ?>" class="btn btn-danger">Kembali</a>

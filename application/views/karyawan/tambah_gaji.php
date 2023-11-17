@@ -23,13 +23,11 @@
                     <label for="gaji">Gaji</label>
                     <input type="text" class="form-control" name="gaji" id="gaji" placeholder="Masukkan gaji"
                         value="<?= set_value('gaji') ?>">
-                    <small class="text-danger"><?= form_error('gaji') ?></small>
+                    <?= form_error('gaji', '<small class="text-danger pt-3">', '</small>'); ?>
                 </div>
                 <button type="submit" class="btn btn-primary" name="tambah">Tambah</button>
                 <a href="<?= base_url('karyawan/data_gaji') ?>" class="btn btn-danger">Kembali</a>
             </form>
-
-
         </div>
     </div>
 </div>

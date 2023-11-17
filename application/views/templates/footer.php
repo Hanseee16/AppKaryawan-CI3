@@ -148,7 +148,7 @@ function showConfirmDialog(event) {
     event.preventDefault();
 
     Swal.fire({
-        title: 'Yakin ingin keluara?',
+        title: 'Yakin ingin keluar?',
         text: 'Anda akan keluar dari sesi saat ini.',
         icon: 'warning',
         showCancelButton: true,

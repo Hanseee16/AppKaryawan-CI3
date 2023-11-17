@@ -9,6 +9,9 @@ class Model_karyawan extends CI_Model
         $this->db->join('divisi', 'divisi.id_divisi = karyawan.id_divisi', 'left');
         $this->db->join('unit', 'unit.id_unit = karyawan.id_unit', 'left');
 
+        // menampilkan data yang nilainya null saja
+        $this->db->where('Gaji IS NULL');
+
         return $this->db->get()->result_array();
     }
 
