@@ -116,7 +116,7 @@ class Karyawan extends CI_Controller
 						</span>
 					</button>
 				</div>');
-                redirect('karyawan/data_karyawan');
+                redirect('karyawan/tambah_karyawan');
                 
             }
         }
