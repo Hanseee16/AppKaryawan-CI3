@@ -123,7 +123,7 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- validasi gaji -->
+<!-- gaji -->
 <script>
 document.getElementById('gaji').addEventListener('input', function(e) {
     // Mengambil nilai yang dimasukkan

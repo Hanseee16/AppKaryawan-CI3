@@ -17,12 +17,13 @@
                 <div class="form-group mb-3">
                     <label for="gaji">Gaji</label>
                     <input type="text" class="form-control" name="gaji" id="gaji" placeholder="Masukkan Gaji"
-                        value="<?= $karyawan['gaji'] ?>">
+                        value="<?= $gaji = number_format($karyawan['gaji'], 0, ',', '.'); ?>">
                     <?= form_error('gaji', '<small class="text-danger pt-3">', '</small>'); ?>
                 </div>
                 <button type="submit" class="btn btn-primary" name="edit">Edit</button>
                 <a href="<?= base_url('karyawan/data_gaji') ?>" class="btn btn-danger">Kembali</a>
             </form>
+
         </div>
     </div>
 
