@@ -8,9 +8,9 @@
                 class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Download </a>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal"
-                data-target="#exampleModal"><i class="fas fa-download fa-sm text-white-50"></i> Import </a>
+                data-target="#exampleModal"><i class="bi bi-file-earmark-arrow-down-fill"></i> Import </a>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Export </a>
+                    class="bi bi-file-earmark-arrow-up-fill"></i> Export </a>
         </div>
     </div>
 
