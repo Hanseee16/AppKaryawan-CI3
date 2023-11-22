@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2023 at 07:30 AM
+-- Generation Time: Nov 22, 2023 at 06:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -37,8 +37,8 @@ CREATE TABLE `divisi` (
 --
 
 INSERT INTO `divisi` (`id_divisi`, `nama_divisi`) VALUES
-(1, 'Divisi-1'),
-(2, 'Divisi-2');
+(1, 'Divisi1'),
+(2, 'Divisi2');
 
 -- --------------------------------------------------------
 
@@ -51,17 +51,21 @@ CREATE TABLE `karyawan` (
   `nama` varchar(255) NOT NULL,
   `nik` varchar(8) NOT NULL,
   `jenis_kelamin` varchar(10) NOT NULL,
-  `id_divisi` int(2) NOT NULL,
-  `id_unit` int(2) NOT NULL,
-  `foto` varchar(255) DEFAULT NULL
+  `id_divisi` int(2) DEFAULT NULL,
+  `id_unit` int(2) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `gaji` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `karyawan`
 --
 
-INSERT INTO `karyawan` (`id`, `nama`, `nik`, `jenis_kelamin`, `id_divisi`, `id_unit`, `foto`) VALUES
-(1, 'Farhan Kamil', '20101140', 'Pria', 1, 1, 'images_(2).jpg');
+INSERT INTO `karyawan` (`id`, `nama`, `nik`, `jenis_kelamin`, `id_divisi`, `id_unit`, `foto`, `gaji`) VALUES
+(291, 'Farhan Kamil', '20101140', 'Pria', NULL, NULL, NULL, NULL),
+(292, 'Eva Fauziah', '20101141', 'Wanita', NULL, NULL, NULL, NULL),
+(293, 'Dadang ', '20101142', 'Pria', NULL, NULL, NULL, NULL),
+(294, 'Siti Mariyam', '20101143', 'Wanita', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -79,8 +83,8 @@ CREATE TABLE `unit` (
 --
 
 INSERT INTO `unit` (`id_unit`, `nama_unit`) VALUES
-(1, 'Unit-1'),
-(2, 'Unit-2');
+(1, 'Unit1'),
+(2, 'Unit2');
 
 -- --------------------------------------------------------
 
@@ -100,9 +104,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nama`, `email`, `password`) VALUES
-(3, 'Ridwan Kamil', 'ridwankamil@gmail.com', '$2y$10$cC6WWDVQ4.NuHYyghOUAruDy93wk3UKz31YhXfy9M69U/koO15oOS'),
-(4, 'Farhan Kamil', 'kamilfarhan225@gmail.com', '$2y$10$zRJk8.TGD0kRjN/4Ljm8VuU8YLHgaiDARbZdzDh1FDdcBkpGhyFoO'),
-(6, 'Admin', 'admin@gmail.com', '$2y$10$uvNOHxdnI7HaKg1Emyb4L..NQ4hK7taV5dAUFLUbDlAM/D9DQ9pQy');
+(1, 'Farhan Kamil', 'kamilfarhan225@gmail.com', '$2y$10$c9s.DwWZYQvEtzJVTEBqi.411eQo.kE.BoZJ1uiWDEvWd5WABx0WC'),
+(2, 'Admin', 'admin@gmail.com', '$2y$10$FFCslv2n4cPyGuwsOJJobehyGpFLiimDm7JLj44qgmaBhelQi5rEa'),
+(3, 'ierdho', 'doe190102@gmail.com', '$2y$10$nUUXlK8bHpOA2ZcsrLVxx.CJFiA9GIWP2zEi72H.GSKTdR6Dek8CK');
 
 --
 -- Indexes for dumped tables
@@ -148,7 +152,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
 
 --
 -- AUTO_INCREMENT for table `unit`
@@ -160,7 +164,7 @@ ALTER TABLE `unit`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

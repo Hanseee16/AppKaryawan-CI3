@@ -8,8 +8,6 @@ class Model_karyawan extends CI_Model
         $this->db->from('karyawan');
         $this->db->join('divisi', 'divisi.id_divisi = karyawan.id_divisi', 'left');
         $this->db->join('unit', 'unit.id_unit = karyawan.id_unit', 'left');
-
-        // menampilkan data yang nilainya null saja
         $this->db->where('Gaji IS NULL');
 
         return $this->db->get()->result_array();
@@ -83,6 +81,7 @@ class Model_karyawan extends CI_Model
         $this->db->select('foto');
         $this->db->from('karyawan');
         $this->db->where('id', $id);
+        
         $query = $this->db->get();
         $result = $query->row();
 
@@ -134,6 +133,7 @@ class Model_karyawan extends CI_Model
     {
         $this->db->select('gaji');
         $this->db->where('id', $id);
+        
         $query = $this->db->get('karyawan');
 
         // Mengembalikan nilai gaji jika data ditemukan, atau null jika tidak ditemukan
@@ -196,4 +196,32 @@ class Model_karyawan extends CI_Model
         $this->db->where('nik', $nik);
         $this->db->update('karyawan', $data);
     }
+
+    // import excel
+    public function importDataExcel($data)
+    {
+        // Pengecekan duplikat
+        $existingData = $this->db->get_where('karyawan', array('nik' => $data['nik']))->row_array();
+
+        if (!$existingData) {
+            // Jika data belum ada, masukkan ke database
+            $this->db->insert('karyawan', $data);
+        }
+    }
+
+    // validasi duplikat pada import data excel
+    public function is_duplicate($nik, $nama)
+    {
+
+        $this->db->where('nik', $nik);
+        $this->db->where('nama', $nama);
+        $query = $this->db->get('karyawan');
+        
+        if($query->num_rows() > 0) {
+            return true;
+        }
+        
+        return false;
+    }
+
 }

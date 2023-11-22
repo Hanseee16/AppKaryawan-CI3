@@ -3,8 +3,15 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        <div>
+            <a href="<?= base_url('karyawan/downloadFile') ?>"
+                class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Download </a>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal"
+                data-target="#exampleModal"><i class="fas fa-download fa-sm text-white-50"></i> Import </a>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Export </a>
+        </div>
     </div>
 
     <?= $this->session->flashdata('flash'); ?>
@@ -32,6 +39,33 @@
                 <tbody>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('karyawan/import_data') ?>" method="post" enctype="multipart/form-data">
+                    <input type="file" class="form-control" id="importexcel" name="importexcel" accept=".xlsx,.xls">
+                    <div class="mt-1">
+                        <span class="text-secondary">File yang harus diupload : .xls, xlsx</span>
+                    </div>
+                    <!-- <?= form_error('file','<div class="text-danger">','</div>') ?> -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
