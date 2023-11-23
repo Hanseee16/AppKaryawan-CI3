@@ -55,14 +55,15 @@
             </div>
             <div class="modal-body">
                 <form action="<?= base_url('karyawan/import_data') ?>" method="post" enctype="multipart/form-data">
-                    <input type="file" class="form-control" id="importexcel" name="importexcel" accept=".xlsx,.xls">
+                    <input type="file" class="form-control" id="importexcel" name="importexcel" accept=".xlsx,.xls"
+                        require>
                     <div class="mt-1">
                         <span class="text-secondary">File yang harus diupload : .xls, xlsx</span>
                     </div>
                     <!-- <?= form_error('file','<div class="text-danger">','</div>') ?> -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
                     </div>
                 </form>
             </div>

@@ -379,78 +379,82 @@ class Karyawan extends CI_Controller
         $config['file_name']     = 'doc' . time();
         $this->load->library('upload', $config);
     
-        if ($this->upload->do_upload('importexcel')) {
-        
-            $file   = $this->upload->data();
-            $reader = ReaderEntityFactory::createXLSXReader();
-            $reader->open('./import_excel/' . $file['file_name']);
-        
-            foreach ($reader->getSheetIterator() as $sheet) {
-                $numRow = 1;
+        if (!$this->upload->do_upload('importexcel')) {
             
-                foreach ($sheet->getRowIterator() as $row) {
-                    if ($numRow > 1) {
-                        
-                        $nik  = $row->getCellAtIndex(0)->getValue();
-                        $nama = $row->getCellAtIndex(1)->getValue();
-                        $jk   = $row->getCellAtIndex(2)->getValue();
-                    
-                        // jika field ada yang kosong
-                        if (empty($nik) || empty($nama) || empty($jk)) {
-                            $this->session->set_flashdata('flash',
-                                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    Import data <strong>Gagal,</strong> terdapat field yang kosong
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>');
-                            redirect('karyawan/data_karyawan');
-                        }
-                    
-                        // jika ada data yang duplikat
-                        $is_duplicate = $this->Model_karyawan->is_duplicate($nik, $nama);
-                        
-                        if ($is_duplicate) {
-                            $this->session->set_flashdata('flash',
-                                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    Import data <strong>Gagal,</strong> terdapat data yang duplikat
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>');
-                            redirect('karyawan/data_karyawan');
-                        }
-                    
-                        $data = array(
-                            'nik'           => $nik,
-                            'nama'          => $nama,
-                            'jenis_kelamin' => $row->getCellAtIndex(2),
-                        );
-                    
-                        $this->Model_karyawan->importDataExcel($data);
-                    }
-                
-                    $numRow++;
-                }
-            
-                $reader->close();
-                unlink('./import_excel/' . $file['file_name']);
-            
-                // jika data valid
-                $this->session->set_flashdata('flash',
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Import data <strong>Berhasil</strong>
+            // jika tidak ada file yang pilih
+            $this->session->set_flashdata('flash',
+                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Import data <strong>Gagal,</strong> tidak ada file yang pilih
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>');
-                redirect('karyawan/data_karyawan');
-            }
+            redirect('karyawan/data_karyawan');
         }
-    }
-
-
-
-
     
+        $file   = $this->upload->data();
+        $reader = ReaderEntityFactory::createXLSXReader();
+        $reader->open('./import_excel/' . $file['file_name']);
+    
+        foreach ($reader->getSheetIterator() as $sheet) {
+            $numRow = 1;
+        
+            foreach ($sheet->getRowIterator() as $row) {
+                if ($numRow > 1) {
+                
+                    $nik  = $row->getCellAtIndex(0)->getValue();
+                    $nama = $row->getCellAtIndex(1)->getValue();
+                    $jk   = $row->getCellAtIndex(2)->getValue();
+                
+                    // jika field ada yang kosong
+                    if (empty($nik) || empty($nama) || empty($jk)) {
+                        $this->session->set_flashdata('flash',
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Import data <strong>Gagal,</strong> terdapat field yang kosong
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>');
+                        redirect('karyawan/data_karyawan');
+                    }
+                
+                    // jika ada data yang duplikat
+                    $is_duplicate = $this->Model_karyawan->is_duplicate($nik, $nama);
+                
+                    if ($is_duplicate) {
+                        $this->session->set_flashdata('flash',
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Import data <strong>Gagal,</strong> terdapat data yang duplikat
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>');
+                        redirect('karyawan/data_karyawan');
+                    }
+                
+                    $data = array(
+                        'nik'           => $nik,
+                        'nama'          => $nama,
+                        'jenis_kelamin' => $row->getCellAtIndex(2),
+                    );
+                
+                    $this->Model_karyawan->importDataExcel($data);
+                }
+                $numRow++;
+            }
+        
+            $reader->close();
+            unlink('./import_excel/' . $file['file_name']);
+        
+            // jika data valid
+            $this->session->set_flashdata('flash',
+                '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                Import data <strong>Berhasil</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+            redirect('karyawan/data_karyawan');
+        }
+    }    
 }
