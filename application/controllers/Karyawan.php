@@ -328,7 +328,8 @@ class Karyawan extends CI_Controller
     }
 
     // server side data gaji karyawan
-    public function getDataGaji() {
+    public function getDataGaji()
+    {
         $results          = $this->Model_serverside_gaji->getDataTable();
         $data             = [];
         $no               = $_POST['start'];
@@ -363,7 +364,7 @@ class Karyawan extends CI_Controller
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
 
-    // download file
+    // download template excel
     public function downloadFile()
     {
         $file_path = 'template_excel/template_karyawan.xlsx';
@@ -384,7 +385,7 @@ class Karyawan extends CI_Controller
             // jika tidak ada file yang pilih
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Import data <strong>Gagal,</strong> tidak ada file yang pilih
+                    Import data <strong>gagal,</strong> tidak ada file yang pilih
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -406,11 +407,11 @@ class Karyawan extends CI_Controller
                     $nama = $row->getCellAtIndex(1)->getValue();
                     $jk   = $row->getCellAtIndex(2)->getValue();
                 
-                    // jika field ada yang kosong
+                    // jika terdapat field yang kosong
                     if (empty($nik) || empty($nama) || empty($jk)) {
                         $this->session->set_flashdata('flash',
                             '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Import data <strong>Gagal,</strong> terdapat field yang kosong
+                                Import data <strong>gagal,</strong> terdapat field yang kosong
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -418,13 +419,13 @@ class Karyawan extends CI_Controller
                         redirect('karyawan/data_karyawan');
                     }
                 
-                    // jika ada data yang duplikat
-                    $is_duplicate = $this->Model_karyawan->is_duplicate($nik, $nama);
+                    // jika terdapat data yang duplikat
+                    $cek_duplikat = $this->Model_karyawan->cek_duplikat($nik);
                 
-                    if ($is_duplicate) {
+                    if ($cek_duplikat) {
                         $this->session->set_flashdata('flash',
                             '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Import data <strong>Gagal,</strong> terdapat data yang duplikat
+                                Import data <strong>gagal,</strong> terdapat data yang duplikat
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

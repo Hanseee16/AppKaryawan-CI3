@@ -204,17 +204,16 @@ class Model_karyawan extends CI_Model
         $existingData = $this->db->get_where('karyawan', array('nik' => $data['nik']))->row_array();
 
         if (!$existingData) {
+            
             // Jika data belum ada, masukkan ke database
             $this->db->insert('karyawan', $data);
         }
     }
 
     // validasi duplikat pada import data excel
-    public function is_duplicate($nik, $nama)
+    public function cek_duplikat($nik)
     {
-
         $this->db->where('nik', $nik);
-        $this->db->where('nama', $nama);
         $query = $this->db->get('karyawan');
         
         if($query->num_rows() > 0) {
@@ -223,5 +222,4 @@ class Model_karyawan extends CI_Model
         
         return false;
     }
-
 }
