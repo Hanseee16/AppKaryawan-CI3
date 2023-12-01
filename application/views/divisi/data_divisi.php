@@ -66,7 +66,6 @@
                     <div class="mt-1">
                         <span class="text-secondary">File yang harus diupload : .xls, xlsx</span>
                     </div>
-                    <!-- <?= form_error('file','<div class="text-danger">','</div>') ?> -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
                         <button type="submit" class="btn btn-primary">Import</button>

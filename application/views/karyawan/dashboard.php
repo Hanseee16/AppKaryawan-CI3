@@ -16,7 +16,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Jumlah Data Karyawan</div>
+                                Data Karyawan</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlahKaryawan ?></div>
                         </div>
                         <div class="col-auto">
@@ -34,7 +34,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Jumlah Data Gaji</div>
+                                Data Gaji</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlahGaji ?></div>
                         </div>
                         <div class="col-auto">

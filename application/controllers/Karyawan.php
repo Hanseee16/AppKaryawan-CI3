@@ -432,7 +432,7 @@ class Karyawan extends CI_Controller
             'required'   => '%s belum diisi',
             'min_length' => '%s tidak boleh kurang 8 karakter',
             'max_length' => '%s tidak boleh lebih 8 karakter',
-            'is_unique'  => 'Maaf, %s sudah digunakan!'
+            'is_unique'  => 'Maaf, %s sudah digunakan'
         ]);
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
             'required'   => '%s belum dipilih'

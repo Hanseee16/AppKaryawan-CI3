@@ -9,16 +9,16 @@ header("Expires: 0");
     <thead>
         <tr>
             <th>No.</th>
-            <th>Nama Divisi</th>
+            <th>Nama Unit</th>
         </tr>
     </thead>
     <tbody>
         <?php
         $i = 1;
-        foreach ($divisi as $dvs) : ?>
+        foreach ($unit as $unt) : ?>
         <tr>
             <td style="text-align: center;"><?= $i++; ?>.</td>
-            <td style="text-align: center;"><?= $dvs['nama_divisi']; ?></td>
+            <td style="text-align: center;"><?= $unt['nama_unit']; ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

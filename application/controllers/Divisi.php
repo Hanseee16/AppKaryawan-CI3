@@ -8,7 +8,6 @@ class Divisi extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Model_divisi');
-       
     }
 
     // view data divisi
@@ -40,30 +39,15 @@ class Divisi extends CI_Controller {
             $this->load->view('divisi/tambah_divisi', $data);
             $this->load->view('templates/footer');
         } else {
-            // Periksa keberadaan nama divisi sebelum menambahkannya
-            $nama_divisi = $this->input->post('nama_divisi');
-            $is_duplicate = $this->Model_divisi->cekNamaDivisiDuplikat($nama_divisi);
-        
-            if ($is_duplicate) {
-                $this->session->set_flashdata('flash',
-                    '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Nama divisi sudah ada, silakan pilih nama divisi lain
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('divisi/tambah_divisi');
-            } else {
-                $this->Model_divisi->tambahDataDivisi($data);
-                $this->session->set_flashdata('flash',
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Data divisi <strong>berhasil</strong> ditambahkan
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('divisi');
-            }
+            $this->Model_divisi->tambahDataDivisi($data);
+            $this->session->set_flashdata('flash',
+                '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                Data divisi <strong>berhasil</strong> ditambahkan
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+            redirect('divisi');
         }
     }
 
@@ -128,14 +112,6 @@ class Divisi extends CI_Controller {
         </div>');
         redirect('divisi');
     }
-    
-    // rules tambah data
-    public function rulesDivisi()
-    {
-        $this->form_validation->set_rules('nama_divisi', 'Nama Divisi', 'required', [
-            'required'   => '%s belum diisi'
-        ]);
-    }
 
     // export data karyawan
     public function exportData()
@@ -163,7 +139,7 @@ class Divisi extends CI_Controller {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>');
-            redirect('karyawan/data_karyawan');
+            redirect('divisi');
         }
     
         $file   = $this->upload->data();
@@ -215,4 +191,13 @@ class Divisi extends CI_Controller {
             redirect('divisi');
         }
     }
+
+     // rules tambah data
+     public function rulesDivisi()
+     {
+         $this->form_validation->set_rules('nama_divisi', 'Nama Divisi', 'required|is_unique[divisi.nama_divisi]', [
+             'required'   => '%s belum diisi',
+             'is_unique'  => '%s sudah sudah ada'
+         ]);
+     }
 }

@@ -24,22 +24,13 @@ class Model_divisi extends CI_Model {
         $this->db->insert('divisi', $data);
     }
 
-    // cek duplikat
-    public function cekNamaDivisiDuplikat($nama_divisi)
-    {
-        $this->db->where('nama_divisi', $nama_divisi);
-        $query = $this->db->get('divisi');
-    
-        return $query->num_rows() > 0;
-    }
-
     // get data berdasarkan id
     public function getDivisiById($id_divisi)
     {
         return $this->db->get_where('divisi', ['id_divisi' => $id_divisi])->row_array();
     }
 
-    // edit data karyawan
+    // edit data divisi
     public function editDataDivisi($id_divisi)
     {    
         $data = [
@@ -67,7 +58,6 @@ class Model_divisi extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('divisi');
-       
 
         return $this->db->get()->result_array();
     }

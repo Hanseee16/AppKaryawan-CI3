@@ -44,7 +44,7 @@
                         <img class="img-profile rounded-circle" src="<?= base_url('/assets/') ?>img/Untitled.jpg">
                     </a>
                     <!-- Dropdown - User Information -->
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                    <!-- <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -63,7 +63,7 @@
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
-                    </div>
+                    </div> -->
                 </li>
             </ul>
         </nav>

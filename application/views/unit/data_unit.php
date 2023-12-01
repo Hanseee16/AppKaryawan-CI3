@@ -5,7 +5,7 @@
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal"
                 data-target="#exampleModal"><i class="bi bi-file-earmark-arrow-down-fill"></i> Import
             </a>
-            <a href="<?= base_url('divisi/exportData')?>"
+            <a href="<?= base_url('unit/exportData')?>"
                 class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="bi bi-file-earmark-arrow-up-fill"></i> Export </a>
         </div>
@@ -13,8 +13,7 @@
     <?= $this->session->flashdata('flash'); ?>
     <div class="card">
         <div class="card-header py-3">
-            <a href="<?= base_url('divisi/tambah_divisi') ?>" class="btn btn-primary"><i
-                    class="bi bi-person-plus-fill"></i>
+            <a href="<?= base_url('unit/tambahData') ?>" class="btn btn-primary"><i class="bi bi-person-plus-fill"></i>
                 Tambah Data</a>
         </div>
         <div class="card-body">
@@ -22,22 +21,22 @@
                 <thead>
                     <tr>
                         <th class="text-center">No.</th>
-                        <th class="text-center">Nama Divisi</th>
+                        <th class="text-center">Nama Unit</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $i = 1;
-                    foreach ($divisi as $dvs) : ?>
+                    foreach ($unit as $unt) : ?>
                     <tr>
                         <td class="text-center"><?= $i++; ?>.</td>
-                        <td class="text-center"><?= $dvs['nama_divisi']; ?></td>
+                        <td class="text-center"><?= $unt['nama_unit']; ?></td>
                         <td class="text-center">
-                            <a href="<?= base_url('divisi/editData/' . $dvs['id_divisi']) ?>" class="btn btn-warning"><i
+                            <a href="<?= base_url('unit/editData/' . $unt['id_unit']) ?>" class="btn btn-warning"><i
                                     class="bi bi-pencil-square"></i></a>
-                            <a href="<?= base_url('divisi/hapusData/' . $dvs['id_divisi']) ?>" class="btn btn-danger"
-                                onclick="return confirm('Apakah Anda yakin ingin menghapus data divisi ini?');">
+                            <a href="<?= base_url('unit/hapusData/' . $unt['id_unit']) ?>" class="btn btn-danger"
+                                onclick="return confirm('Apakah Anda yakin ingin menghapus data unit ini?');">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>
                         </td>
@@ -60,13 +59,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('divisi/importData') ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url('unit/importData') ?>" method="post" enctype="multipart/form-data">
                     <input type="file" class="form-control" id="importexcel" name="importexcel" accept=".xlsx,.xls"
                         require>
                     <div class="mt-1">
                         <span class="text-secondary">File yang harus diupload : .xls, xlsx</span>
                     </div>
-                    <!-- <?= form_error('file','<div class="text-danger">','</div>') ?> -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
                         <button type="submit" class="btn btn-primary">Import</button>
