@@ -13,34 +13,10 @@ class Model_karyawan extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    // menampilkan seluruh data divisi
-    public function getAllDivisi()
-    {
-        return $this->db->get('divisi')->result_array();
-    }
-
-    // menampilkan seluruh data unit
-    public function getAllUnit()
-    {
-        return $this->db->get('unit')->result_array();
-    }
-
     // jumlah karyawan
     public function getJumlahKaryawan()
     {
         return $this->db->get('karyawan')->num_rows();
-    }
-
-    // jumlah divisi
-    public function getJumlahDivisi()
-    {
-        return $this->db->get('divisi')->num_rows();
-    }
-
-    // jumlah unit
-    public function getJumlahUnit()
-    {
-        return $this->db->get('unit')->num_rows();
     }
 
     // jumlah user
@@ -59,7 +35,12 @@ class Model_karyawan extends CI_Model
     // get data berdasarkan id
     public function getKaryawanById($id)
     {
-        return $this->db->get_where('karyawan', ['id' => $id])->row_array();
+        $this->db->select('*');
+        $this->db->from('karyawan'); // replace with your actual table name
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+
+        return $query->row_array(); // Assuming you expect a single row
     }   
     
     // get data berdasarkan nik
@@ -136,7 +117,6 @@ class Model_karyawan extends CI_Model
         
         $query = $this->db->get('karyawan');
 
-        // Mengembalikan nilai gaji jika data ditemukan, atau null jika tidak ditemukan
         return $query->row() ? $query->row()->gaji : null;
     }
 
@@ -154,7 +134,7 @@ class Model_karyawan extends CI_Model
             "nama"          => htmlspecialchars($this->input->post('nama', true)),
             "nik"           => preg_replace('/[^a-zA-Z0-9]/', '', $this->input->post('nik')),
             "jenis_kelamin" => htmlspecialchars($this->input->post('jenis_kelamin', true)),
-            "id_divisi"     => htmlspecialchars($this->input->post('id_divisi', true)),
+            "id_divisi"     => ($this->input->post('id_divisi') == '') ? null : htmlspecialchars($this->input->post('id_divisi', true)),
             "id_unit"       => htmlspecialchars($this->input->post('id_unit', true)),
         ];
     
@@ -175,17 +155,15 @@ class Model_karyawan extends CI_Model
                     }
                 }
             } else {
-                // Handle error jika gagal mengunggah foto baru
                 $error = ['error' => $this->upload->display_errors()];
             }
         }
     
-        // Update data karyawan
         $this->db->where('id', $id);
         $this->db->update('karyawan', $data);
     }
     
-    // edit data gaji karyawan
+    // edit data gaji by NIK & GAJI
     public function editDataGaji($nik, $gaji)
     {
         $data = [
@@ -196,6 +174,21 @@ class Model_karyawan extends CI_Model
         $this->db->where('nik', $nik);
         $this->db->update('karyawan', $data);
     }
+
+    // get data gaji by NIK
+    public function getGajiByNik($nik)
+{
+    $this->db->select('gaji');
+    $this->db->where('nik', $nik);
+    $query = $this->db->get('karyawan');
+
+    if ($query->num_rows() > 0) {
+        $result = $query->row();
+        return $result->gaji;
+    } else {
+        return null;
+    }
+}
 
     // import excel
     public function importDataExcel($data)
@@ -221,5 +214,16 @@ class Model_karyawan extends CI_Model
         }
         
         return false;
+    }
+
+    // export data karyawan
+    public function exportDataKaryawan()
+    {
+        $this->db->select('*');
+        $this->db->from('karyawan');
+        $this->db->join('divisi', 'divisi.id_divisi = karyawan.id_divisi', 'left');
+        $this->db->join('unit', 'unit.id_unit = karyawan.id_unit', 'left');
+
+        return $this->db->get()->result_array();
     }
 }

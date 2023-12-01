@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'third_party/Spout/Autoloader/autoload.php';
-
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class Karyawan extends CI_Controller
@@ -11,6 +10,8 @@ class Karyawan extends CI_Controller
         parent::__construct();
         $this->load->helper('download');
         $this->load->model('Model_karyawan');
+        $this->load->model('Model_divisi');
+        $this->load->model('Model_unit');
         $this->load->model('Model_serverside_karyawan');
         $this->load->model('Model_serverside_gaji');
     }
@@ -21,8 +22,8 @@ class Karyawan extends CI_Controller
         $data['title']          = 'Dashboard';
         $data['jumlahKaryawan'] = $this->Model_karyawan->getJumlahKaryawan();
         $data['jumlahGaji']     = $this->Model_karyawan->getJumlahDataGaji();
-        $data['jumlahDivisi']   = $this->Model_karyawan->getJumlahDivisi();
-        $data['jumlahUnit']     = $this->Model_karyawan->getJumlahUnit();
+        $data['jumlahDivisi']   = $this->Model_divisi->getJumlahDivisi();
+        $data['jumlahUnit']     = $this->Model_unit->getJumlahUnit();
         $data['user']           = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('templates/header', $data);
@@ -58,35 +59,12 @@ class Karyawan extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    // rules tambah data
-    public function rulesTambahKaryawan()
-    {
-        $this->form_validation->set_rules('nama', 'Nama', 'required', [
-            'required'   => '%s belum diisi'
-        ]);
-        $this->form_validation->set_rules('nik', 'NIK', 'required|min_length[8]|max_length[8]|is_unique[karyawan.nik]', [
-            'required'   => '%s belum diisi',
-            'min_length' => '%s tidak boleh kurang 8 karakter',
-            'max_length' => '%s tidak boleh lebih 8 karakter',
-            'is_unique'  => 'Maaf, %s sudah digunakan!'
-        ]);
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
-            'required'   => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
-            'required'   => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
-            'required'   => '%s belum dipilih'
-        ]);
-    }
-
     // tambah data karyawan
     public function tambah_karyawan()
     {
         $data['title']  = 'Tambah Data Karyawan';
-        $data['divisi'] = $this->Model_karyawan->getAllDivisi();
-        $data['unit']   = $this->Model_karyawan->getAllUnit();
+        $data['divisi'] = $this->Model_divisi->getAllDivisi();
+        $data['unit']   = $this->Model_unit->getAllUnit();
         $data['user']   = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
        $this->rulesTambahKaryawan();
@@ -102,14 +80,13 @@ class Karyawan extends CI_Controller
             if ($this->Model_karyawan->tambahDataKaryawan() == true) {
                 $this->session->set_flashdata('flash', 
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-				Data karyawan <strong>Berhasil</strong> ditambahkan
+				Data karyawan <strong>berhasil</strong> ditambahkan
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;
 						</span>
 					</button>
 				</div>');
                 redirect('karyawan/data_karyawan');
-
             } else {
                 $this->session->set_flashdata('flash', 
                 '<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -120,17 +97,8 @@ class Karyawan extends CI_Controller
 					</button>
 				</div>');
                 redirect('karyawan/tambah_karyawan');
-                
             }
         }
-    }
-
-    // rules tambah gaji
-    public function rulesGaji()
-    {
-        $this->form_validation->set_rules('gaji', 'Gaji', 'required', [
-            'required' => '%s belum diisi'
-        ]);       
     }
 
     // tambah data gaji karyawan
@@ -161,49 +129,23 @@ class Karyawan extends CI_Controller
                 $this->Model_karyawan->tambahDataGaji($id, $gaji);
                 $this->session->set_flashdata('flash',
                     '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Gaji karyawan <strong>Berhasil</strong> ditambahkan
+                    Gaji karyawan <strong>berhasil</strong> ditambahkan
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>');
-            
                 redirect('karyawan/data_gaji');
-                
-            } else {
-                
-                // Jika gaji tidak null atau sudah ditambahkan
+            } else {                
                 $this->session->set_flashdata('flash',
                     '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Maaf,</strong>  gaji karyawan sudah pernah ditambahkan
+                    <strong>Maaf,</strong> gaji karyawan sudah pernah ditambahkan
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>');
-            
                 redirect('karyawan/tambah_gaji');
             }
         }
-    }
-
-    // Rules validasi edit data
-    public function rulesEdit()
-    {
-        $this->form_validation->set_rules('nama', 'Nama', 'required', [
-            'required'     => '%s belum diisi!'
-        ]);
-        $this->form_validation->set_rules('nik', 'NIK', 'required|exact_length[8]', [
-            'required'     => '%s belum diisi!',
-            'exact_length' => '%s harus terdiri dari 8 digit!'
-        ]);
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
-            'required'     => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
-            'required'     => '%s belum dipilih'
-        ]);
-        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
-            'required'     => '%s belum dipilih'
-        ]);
     }
 
     // edit data karyawan
@@ -211,8 +153,8 @@ class Karyawan extends CI_Controller
     {
         $data['title']         = 'Edit Data Karyawan';
         $data['karyawan']      = $this->Model_karyawan->getKaryawanById($id);
-        $data['divisi']        = $this->Model_karyawan->getAllDivisi();
-        $data['unit']          = $this->Model_karyawan->getAllUnit();
+        $data['divisi']        = $this->Model_divisi->getAllDivisi();
+        $data['unit']          = $this->Model_unit->getAllUnit();
         $data['jenis_kelamin'] = ['Pria', 'Wanita'];
         $data['user']          = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
@@ -243,7 +185,7 @@ class Karyawan extends CI_Controller
         $data['title']    = 'Edit Data Gaji Karyawan';
         $data['karyawan'] = $this->Model_karyawan->getKaryawanByNik($nik);
         $data['user']     = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
+    
         $this->rulesGaji();
     
         if ($this->form_validation->run() == false) {
@@ -252,16 +194,28 @@ class Karyawan extends CI_Controller
             $this->load->view('templates/topbar');
             $this->load->view('karyawan/edit_gaji', $data);
             $this->load->view('templates/footer');
-        } else {  
-            $this->Model_karyawan->editDataGaji($nik, $gaji);
-            $this->session->set_flashdata('flash', 
-            '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Gaji karyawan <strong>Berhasil</strong> diubah
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>');
-            
+        } else {
+            $gaji = str_replace('.', '', $this->input->post('gaji'));
+        
+            $existingGaji = $this->Model_karyawan->getGajiByNik($nik);
+            if ($existingGaji != $gaji) {
+                $this->Model_karyawan->editDataGaji($nik, $gaji);
+                $this->session->set_flashdata('flash', 
+                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        Gaji karyawan <strong>Berhasil</strong> diubah
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>');
+            } else {
+                $this->session->set_flashdata('flash', 
+                    '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Tidak ada perubahan yang dilakukan
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>');
+            }
             redirect('karyawan/data_gaji');
         }
     }
@@ -287,7 +241,7 @@ class Karyawan extends CI_Controller
 
         $this->session->set_flashdata('flash', 
         '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Data karyawan <strong>Berhasil</strong> dihapus
+            Data karyawan <strong>berhasil</strong> dihapus
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -300,6 +254,7 @@ class Karyawan extends CI_Controller
         $results = $this->Model_serverside_karyawan->getDataTable();
         $data    = [];
         $no      = $_POST['start'];
+        
         foreach ($results as $result) {
             $row = array();
             $row[] = '<div class="text-center">' . ++$no . '.</div>';
@@ -434,8 +389,8 @@ class Karyawan extends CI_Controller
                     }
                 
                     $data = array(
-                        'nik'           => $nik,
-                        'nama'          => $nama,
+                        'nik'           => $row->getCellAtIndex(0),
+                        'nama'          => $row->getCellAtIndex(1),
                         'jenis_kelamin' => $row->getCellAtIndex(2),
                     );
                 
@@ -450,12 +405,72 @@ class Karyawan extends CI_Controller
             // jika data valid
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                Import data <strong>Berhasil</strong>
+                Import data <strong>berhasil</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>');
             redirect('karyawan/data_karyawan');
         }
-    }    
+    }
+
+    // export data karyawan
+    public function exportData()
+    {
+        $data['title'] = 'Data Karyawan';
+        $data['karyawan'] = $this->Model_karyawan->exportDataKaryawan();
+        $this->load->view('excel/data_karyawan', $data);
+    }
+
+    // rules tambah data
+    public function rulesTambahKaryawan()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'required', [
+            'required'   => '%s belum diisi'
+        ]);
+        $this->form_validation->set_rules('nik', 'NIK', 'required|min_length[8]|max_length[8]|is_unique[karyawan.nik]', [
+            'required'   => '%s belum diisi',
+            'min_length' => '%s tidak boleh kurang 8 karakter',
+            'max_length' => '%s tidak boleh lebih 8 karakter',
+            'is_unique'  => 'Maaf, %s sudah digunakan!'
+        ]);
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
+            'required'   => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
+            'required'   => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
+            'required'   => '%s belum dipilih'
+        ]);
+    }
+
+     // Rules validasi edit data
+    public function rulesEdit()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'required', [
+            'required'     => '%s belum diisi!'
+        ]);
+        $this->form_validation->set_rules('nik', 'NIK', 'required|exact_length[8]', [
+            'required'     => '%s belum diisi!',
+            'exact_length' => '%s harus terdiri dari 8 digit!'
+        ]);
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_divisi', 'Divisi', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+        $this->form_validation->set_rules('id_unit', 'Unit', 'required', [
+            'required'     => '%s belum dipilih'
+        ]);
+    }
+
+     // rules tambah gaji
+     public function rulesGaji()
+     {
+         $this->form_validation->set_rules('gaji', 'Gaji', 'required', [
+             'required' => '%s belum diisi'
+         ]);       
+     }
 }

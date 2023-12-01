@@ -34,18 +34,21 @@
                 <div class="form-group mb-3">
                     <label for="id_divisi">Divisi</label>
                     <select class="form-control" name="id_divisi" id="id_divisi">
-                        <option value="" <?= set_select('id_divisi', '', TRUE) ?>>Pilih</option>
-                        <option value="1" <?= set_select('id_divisi', '1') ?>>Divisi-1</option>
-                        <option value="2" <?= set_select('id_divisi', '2') ?>>Divisi-2</option>
+                        <option value="">Pilih</option>
+                        <?php foreach ($divisi as $dvs) : ?>
+                        <option value="<?= $dvs['id_divisi'] ?>"><?= $dvs['nama_divisi'] ?></option>
+                        <?php endforeach; ?>
                     </select>
                     <small class="text-danger"><?= form_error('id_divisi') ?></small>
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="id_unit">Unit</label>
                     <select class="form-control" name="id_unit" id="id_unit">
                         <option value="" <?= set_select('id_unit', '', TRUE) ?>>Pilih</option>
-                        <option value="1" <?= set_select('id_unit', '1') ?>>Unit-1</option>
-                        <option value="2" <?= set_select('id_unit', '2') ?>>Unit-2</option>
+                        <?php foreach ($unit as $unt) : ?>
+                        <option value="<?= $unt['id_unit'] ?>"><?= $unt['nama_unit'] ?></option>
+                        <?php endforeach; ?>
                     </select>
                     <small class="text-danger"><?= form_error('id_unit') ?></small>
                 </div>
