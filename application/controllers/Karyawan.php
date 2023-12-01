@@ -330,7 +330,7 @@ class Karyawan extends CI_Controller
     // import data excel
     public function import_data()
     {
-        $config['upload_path']   = './import_excel/';
+        $config['upload_path']   = './import_excel/karyawan/';
         $config['allowed_types'] = 'xlsx|xls';
         $config['file_name']     = 'doc' . time();
         $this->load->library('upload', $config);
@@ -350,7 +350,7 @@ class Karyawan extends CI_Controller
     
         $file   = $this->upload->data();
         $reader = ReaderEntityFactory::createXLSXReader();
-        $reader->open('./import_excel/' . $file['file_name']);
+        $reader->open('./import_excel/karyawan/' . $file['file_name']);
     
         foreach ($reader->getSheetIterator() as $sheet) {
             $numRow = 1;
@@ -400,7 +400,7 @@ class Karyawan extends CI_Controller
             }
         
             $reader->close();
-            unlink('./import_excel/' . $file['file_name']);
+            unlink('./import_excel/karyawan/' . $file['file_name']);
         
             // jika data valid
             $this->session->set_flashdata('flash',
