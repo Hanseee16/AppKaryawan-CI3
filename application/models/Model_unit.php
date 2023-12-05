@@ -58,8 +58,31 @@ class Model_unit extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('unit');
-
         return $this->db->get()->result_array();
+    }
+
+    // import data
+    public function importDataExcel($data)
+    {
+        // Pengecekan duplikat
+        $existingData = $this->db->get_where('unit', array('nama_unit' => $data['nama_unit']))->row_array();
+        
+        if (!$existingData) {            
+            $this->db->insert('unit', $data);
+        }
+    }
+
+    // cek duplikat import data
+    public function cekDuplikat($nama_unit)
+    {
+        $this->db->where('nama_unit', $nama_unit);
+        $query = $this->db->get('unit');
+        
+        if($query->num_rows() > 0) {
+            return true;
+        }
+        
+        return false;
     }
 
 }

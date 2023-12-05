@@ -63,7 +63,7 @@ class Model_divisi extends CI_Model {
     }
 
     // cek duplikat pada import data
-    public function cek_duplikat($nama_divisi)
+    public function cekDuplikat($nama_divisi)
     {
         $this->db->where('nama_divisi', $nama_divisi);
         $query = $this->db->get('divisi');

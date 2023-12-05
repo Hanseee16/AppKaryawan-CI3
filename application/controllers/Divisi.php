@@ -42,7 +42,7 @@ class Divisi extends CI_Controller {
             $this->Model_divisi->tambahDataDivisi($data);
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                Data divisi <strong>berhasil</strong> ditambahkan
+                    Data divisi <strong>berhasil</strong> ditambahkan
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -67,29 +67,15 @@ class Divisi extends CI_Controller {
             $this->load->view('divisi/edit_divisi', $data);
             $this->load->view('templates/footer');
         } else {
-            
-            $divisi_lama = $this->Model_divisi->getDivisiById($id_divisi);
-
-            if ($this->cekData($divisi_lama, $this->input->post())) {
-                $this->Model_divisi->editDataDivisi($id_divisi);
-                $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Data divisi <strong>berhasil</strong> diubah
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('divisi');
-            } else {
-                $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        Tidak ada perubahan yang dilakukan
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('divisi');
-            }
+            $this->Model_divisi->editDataDivisi($id_divisi);
+            $this->session->set_flashdata('flash', 
+                '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Data divisi <strong>berhasil</strong> diubah
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+            redirect('divisi');
         }
     }
 
@@ -113,15 +99,15 @@ class Divisi extends CI_Controller {
         redirect('divisi');
     }
 
-    // export data karyawan
+    // export data
     public function exportData()
     {
-        $data['title'] = 'Data Divisi';
+        $data['title']  = 'Data Divisi';
         $data['divisi'] = $this->Model_divisi->exportDataDivisi();
         $this->load->view('excel/data_divisi', $data);
     }
 
-    // import data divisi
+    // import data
     public function importData()
     {
         $config['upload_path']   = './import_excel/divisi/';
@@ -130,15 +116,13 @@ class Divisi extends CI_Controller {
         $this->load->library('upload', $config);
     
         if (!$this->upload->do_upload('importexcel')) {
-            
-            // jika tidak ada file yang pilih
             $this->session->set_flashdata('flash',
-                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Import data <strong>gagal,</strong> tidak ada file yang pilih
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Import data <strong>gagal,</strong> tidak ada file yang pilih
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
             redirect('divisi');
         }
     
@@ -152,19 +136,17 @@ class Divisi extends CI_Controller {
             foreach ($sheet->getRowIterator() as $row) {
                 if ($numRow > 1) {
                 
-                    $nama_divisi  = $row->getCellAtIndex(0)->getValue();
+                    $nama_divisi = $row->getCellAtIndex(0)->getValue();
+                    $cekDuplikat = $this->Model_divisi->cekDuplikat($nama_divisi);
                 
-                    // jika terdapat data yang duplikat
-                    $cek_duplikat = $this->Model_divisi->cek_duplikat($nama_divisi);
-                
-                    if ($cek_duplikat) {
+                    if ($cekDuplikat) {
                         $this->session->set_flashdata('flash',
                             '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 Import data <strong>gagal,</strong> terdapat data yang duplikat
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>');
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>');
                         redirect('divisi');
                     }
                 
@@ -183,13 +165,21 @@ class Divisi extends CI_Controller {
             // jika data valid
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                Import data <strong>berhasil</strong>
+                    Import data <strong>berhasil</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>');
             redirect('divisi');
         }
+    }
+
+    // download template
+    public function downloadFile()
+    {
+        $file_path = 'template_excel/template_divisi.xlsx';
+        $file_name = 'template_divisi.xlsx';        
+        force_download($file_path, NULL);
     }
 
      // rules tambah data

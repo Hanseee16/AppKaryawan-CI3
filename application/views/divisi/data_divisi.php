@@ -2,6 +2,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
         <div>
+            <a href="<?= base_url('divisi/downloadFile') ?>"
+                class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-download fa-sm"></i>
+                Download </a>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal"
                 data-target="#exampleModal"><i class="bi bi-file-earmark-arrow-down-fill"></i> Import
             </a>

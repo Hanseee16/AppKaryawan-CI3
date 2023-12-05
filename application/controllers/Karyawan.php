@@ -80,7 +80,7 @@ class Karyawan extends CI_Controller
             if ($this->Model_karyawan->tambahDataKaryawan() == true) {
                 $this->session->set_flashdata('flash', 
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-				Data karyawan <strong>berhasil</strong> ditambahkan
+				    Data karyawan <strong>berhasil</strong> ditambahkan
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;
 						</span>
@@ -90,10 +90,9 @@ class Karyawan extends CI_Controller
             } else {
                 $this->session->set_flashdata('flash', 
                 '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				Terjadi kesalahan saat mengunggah foto. Pastikan itu adalah file JPG dengan ukuran kurang dari 2 MB.
+				    Terjadi kesalahan saat mengunggah foto. Pastikan itu adalah file JPG dengan ukuran kurang dari 2 MB.
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;
-						</span>
+						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>');
                 redirect('karyawan/tambah_karyawan');
@@ -129,7 +128,7 @@ class Karyawan extends CI_Controller
                 $this->Model_karyawan->tambahDataGaji($id, $gaji);
                 $this->session->set_flashdata('flash',
                     '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Gaji karyawan <strong>berhasil</strong> ditambahkan
+                        Gaji karyawan <strong>berhasil</strong> ditambahkan
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -138,7 +137,7 @@ class Karyawan extends CI_Controller
             } else {                
                 $this->session->set_flashdata('flash',
                     '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Maaf,</strong> gaji karyawan sudah pernah ditambahkan
+                        <strong>Maaf,</strong> gaji karyawan sudah pernah ditambahkan
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -170,7 +169,7 @@ class Karyawan extends CI_Controller
             $this->Model_karyawan->editDataKaryawan($id);
             $this->session->set_flashdata('flash', 
             '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            Data karyawan <strong>Berhasil</strong> diubah
+                Data karyawan <strong>Berhasil</strong> diubah
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -195,26 +194,28 @@ class Karyawan extends CI_Controller
             $this->load->view('karyawan/edit_gaji', $data);
             $this->load->view('templates/footer');
         } else {
+            
+            // manampilkan titik pada gaji
             $gaji = str_replace('.', '', $this->input->post('gaji'));
         
             $existingGaji = $this->Model_karyawan->getGajiByNik($nik);
             if ($existingGaji != $gaji) {
                 $this->Model_karyawan->editDataGaji($nik, $gaji);
                 $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Gaji karyawan <strong>Berhasil</strong> diubah
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
+                '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Gaji karyawan <strong>Berhasil</strong> diubah
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
             } else {
                 $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        Tidak ada perubahan yang dilakukan
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>');
+                '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Tidak ada perubahan yang dilakukan
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
             }
             redirect('karyawan/data_gaji');
         }
@@ -256,7 +257,7 @@ class Karyawan extends CI_Controller
         $no      = $_POST['start'];
         
         foreach ($results as $result) {
-            $row = array();
+            $row   = array();
             $row[] = '<div class="text-center">' . ++$no . '.</div>';
             $row[] = '<div class="text-center">' . $result->nama . '</div>';
             $row[] = '<div class="text-center">' . $result->nik . '</div>';
@@ -297,7 +298,7 @@ class Karyawan extends CI_Controller
                 
                 $countGajiNotNull++; 
     
-                $row = array();
+                $row   = array();
                 $row[] = '<div class="text-center">' . ++$no . '.</div>';
                 $row[] = '<div class="text-center">' . $result->nama . '</div>';
                 $row[] = '<div class="text-center">' . $result->nik . '</div>';
@@ -335,16 +336,14 @@ class Karyawan extends CI_Controller
         $config['file_name']     = 'doc' . time();
         $this->load->library('upload', $config);
     
-        if (!$this->upload->do_upload('importexcel')) {
-            
-            // jika tidak ada file yang pilih
+        if (!$this->upload->do_upload('importexcel')) {            
             $this->session->set_flashdata('flash',
-                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Import data <strong>gagal,</strong> tidak ada file yang pilih
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Import data <strong>gagal,</strong> tidak ada file yang pilih
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
             redirect('karyawan/data_karyawan');
         }
     
@@ -365,12 +364,12 @@ class Karyawan extends CI_Controller
                     // jika terdapat field yang kosong
                     if (empty($nik) || empty($nama) || empty($jk)) {
                         $this->session->set_flashdata('flash',
-                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Import data <strong>gagal,</strong> terdapat field yang kosong
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>');
+                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Import data <strong>gagal,</strong> terdapat field yang kosong
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>');
                         redirect('karyawan/data_karyawan');
                     }
                 
@@ -379,12 +378,12 @@ class Karyawan extends CI_Controller
                 
                     if ($cek_duplikat) {
                         $this->session->set_flashdata('flash',
-                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Import data <strong>gagal,</strong> terdapat data yang duplikat
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>');
+                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Import data <strong>gagal,</strong> terdapat data yang duplikat
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>');
                         redirect('karyawan/data_karyawan');
                     }
                 
@@ -405,7 +404,7 @@ class Karyawan extends CI_Controller
             // jika data valid
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                Import data <strong>berhasil</strong>
+                    Import data <strong>berhasil</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -417,7 +416,7 @@ class Karyawan extends CI_Controller
     // export data karyawan
     public function exportData()
     {
-        $data['title'] = 'Data Karyawan';
+        $data['title']    = 'Data Karyawan';
         $data['karyawan'] = $this->Model_karyawan->exportDataKaryawan();
         $this->load->view('excel/data_karyawan', $data);
     }

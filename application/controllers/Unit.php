@@ -41,7 +41,7 @@ class Unit extends CI_Controller {
             $this->Model_unit->tambahDataUnit($data);
             $this->session->set_flashdata('flash',
                 '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                Data unit <strong>berhasil</strong> ditambahkan
+                    Data unit <strong>berhasil</strong> ditambahkan
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -66,35 +66,16 @@ class Unit extends CI_Controller {
             $this->load->view('unit/editData', $data);
             $this->load->view('templates/footer');
         } else {
-            $unit_lama = $this->Model_unit->getUnitById($id_unit);
-
-            if ($this->cekData($unit_lama, $this->input->post())) {
-                $this->Model_unit->editDataUnit($id_unit);
-                $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Data unit <strong>berhasil</strong> diubah
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('unit');
-            } else {
-                $this->session->set_flashdata('flash', 
-                    '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        Tidak ada perubahan yang dilakukan
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
-                redirect('unit');
-            }
+            $this->Model_unit->editDataUnit($id_unit);
+            $this->session->set_flashdata('flash', 
+                '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Data unit <strong>berhasil</strong> diubah
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+            redirect('unit');
         }
-    }
-
-    // cek jika ada atau tidak nya perubahan pada data
-    private function cekData($data_lama, $data_baru)
-    {
-        return $data_lama['nama_unit'] != $data_baru['nama_unit'];    
     }
 
     // hapus data
@@ -117,6 +98,81 @@ class Unit extends CI_Controller {
         $data['title']  = 'Data Unit';
         $data['unit']   = $this->Model_unit->exportDataUnit();
         $this->load->view('excel/data_unit', $data);
+    }
+
+    // download template
+    public function downloadFile()
+    {
+        $file_path = 'template_excel/template_unit.xlsx';
+        $file_name = 'template_unit.xlsx';        
+        force_download($file_path, NULL);
+    }
+
+    // import data
+    public function importData()
+    {
+        $config['upload_path']   = './import_excel/unit/';
+        $config['allowed_types'] = 'xlsx|xls';
+        $config['file_name']     = 'doc' . time();
+        $this->load->library('upload', $config);
+    
+        if (!$this->upload->do_upload('importexcel')) {            
+            $this->session->set_flashdata('flash',
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Import data <strong>gagal,</strong> tidak ada file yang pilih
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
+            redirect('unit');
+        }
+    
+        $file   = $this->upload->data();
+        $reader = ReaderEntityFactory::createXLSXReader();
+        $reader->open('./import_excel/unit/' . $file['file_name']);
+    
+        foreach ($reader->getSheetIterator() as $sheet) {
+            $numRow = 1;
+        
+            foreach ($sheet->getRowIterator() as $row) {
+                if ($numRow > 1) {
+                    
+                    $nama_unit   = $row->getCellAtIndex(0)->getValue();                
+                    $cekDuplikat = $this->Model_unit->cekDuplikat($nama_unit);
+                
+                    if ($cekDuplikat) {
+                        $this->session->set_flashdata('flash',
+                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Import data <strong>gagal,</strong> terdapat data yang duplikat
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>');
+                        redirect('unit');
+                    }
+                
+                    $data = array(
+                        'nama_unit' => $row->getCellAtIndex(0),
+                    );
+                
+                    $this->Model_unit->importDataExcel($data);
+                }
+                $numRow++;
+            }
+        
+            $reader->close();
+            unlink('./import_excel/unit/' . $file['file_name']);
+        
+            // jika data valid
+            $this->session->set_flashdata('flash',
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                Import data <strong>berhasil</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
+            redirect('unit');
+        }
     }
 
      // rules

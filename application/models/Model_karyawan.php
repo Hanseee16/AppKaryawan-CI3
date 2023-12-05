@@ -9,7 +9,6 @@ class Model_karyawan extends CI_Model
         $this->db->join('divisi', 'divisi.id_divisi = karyawan.id_divisi', 'left');
         $this->db->join('unit', 'unit.id_unit = karyawan.id_unit', 'left');
         $this->db->where('Gaji IS NULL');
-
         return $this->db->get()->result_array();
     }
 
@@ -36,11 +35,10 @@ class Model_karyawan extends CI_Model
     public function getKaryawanById($id)
     {
         $this->db->select('*');
-        $this->db->from('karyawan'); // replace with your actual table name
+        $this->db->from('karyawan');
         $this->db->where('id', $id);
         $query = $this->db->get();
-
-        return $query->row_array(); // Assuming you expect a single row
+        return $query->row_array();
     }   
     
     // get data berdasarkan nik
@@ -167,8 +165,8 @@ class Model_karyawan extends CI_Model
     public function editDataGaji($nik, $gaji)
     {
         $data = [
-            'nik'   => $nik,
-            "gaji"  => str_replace('.', '', $this->input->post('gaji')),
+            'nik'  => $nik,
+            "gaji" => str_replace('.', '', $this->input->post('gaji')),
         ];
         
         $this->db->where('nik', $nik);
@@ -177,18 +175,18 @@ class Model_karyawan extends CI_Model
 
     // get data gaji by NIK
     public function getGajiByNik($nik)
-{
-    $this->db->select('gaji');
-    $this->db->where('nik', $nik);
-    $query = $this->db->get('karyawan');
-
-    if ($query->num_rows() > 0) {
-        $result = $query->row();
-        return $result->gaji;
-    } else {
-        return null;
+    {
+        $this->db->select('gaji');
+        $this->db->where('nik', $nik);
+        $query = $this->db->get('karyawan');
+    
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->gaji;
+        } else {
+            return null;
+        }
     }
-}
 
     // import excel
     public function importDataExcel($data)
@@ -196,9 +194,7 @@ class Model_karyawan extends CI_Model
         // Pengecekan duplikat
         $existingData = $this->db->get_where('karyawan', array('nik' => $data['nik']))->row_array();
 
-        if (!$existingData) {
-            
-            // Jika data belum ada, masukkan ke database
+        if (!$existingData) {            
             $this->db->insert('karyawan', $data);
         }
     }
@@ -212,7 +208,6 @@ class Model_karyawan extends CI_Model
         if($query->num_rows() > 0) {
             return true;
         }
-        
         return false;
     }
 
