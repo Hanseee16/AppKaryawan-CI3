@@ -152,7 +152,7 @@ class Unit extends CI_Controller {
                     }
                 
                     $data = array(
-                        'nama_unit' => $row->getCellAtIndex(0),
+                        'nama_unit' => htmlspecialchars($row->getCellAtIndex(0)),
                     );
                 
                     $this->Model_unit->importDataExcel($data);

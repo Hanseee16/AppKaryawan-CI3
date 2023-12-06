@@ -151,7 +151,7 @@ class Divisi extends CI_Controller {
                     }
                 
                     $data = array(
-                        'nama_divisi' => $row->getCellAtIndex(0),
+                        'nama_divisi' => htmlspecialchars($row->getCellAtIndex(0)),
                     );
                 
                     $this->Model_divisi->importDataExcel($data);

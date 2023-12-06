@@ -140,7 +140,7 @@ class Model_karyawan extends CI_Model
         if (!empty($_FILES['foto']['name'])) {
             if ($this->upload->do_upload('foto')) {
                 
-                // Jika foto telah diunggah, proses data
+                // Jika foto telah diunggah
                 $upload_data = $this->upload->data();
                 $data['foto'] = $upload_data['file_name'];
             
