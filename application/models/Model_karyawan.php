@@ -220,5 +220,5 @@ class Model_karyawan extends CI_Model
         $this->db->join('unit', 'unit.id_unit = karyawan.id_unit', 'left');
 
         return $this->db->get()->result_array();
-    }
+    }    
 }

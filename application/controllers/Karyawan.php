@@ -14,6 +14,7 @@ class Karyawan extends CI_Controller
         $this->load->model('Model_unit');
         $this->load->model('Model_serverside_karyawan');
         $this->load->model('Model_serverside_gaji');
+        $this->load->model('Model_filterdata');
     }
 
     // view halaman index atau dashboard
@@ -36,15 +37,18 @@ class Karyawan extends CI_Controller
     // view data karyawan
     public function data_karyawan()
     {
-        $data['title'] = 'Data Karyawan';
-        $data['user']  = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
+        $data['title']  = 'Data Karyawan';
+        $data['divisi'] = $this->Model_divisi->getAllDivisi();
+        $data['unit']   = $this->Model_unit->getAllUnit();
+        $data['user']   = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar');
         $this->load->view('karyawan/data_karyawan', $data);
         $this->load->view('templates/footer');
     }
+    
 
     // view data gaji karyawan
     public function data_gaji()
@@ -224,18 +228,14 @@ class Karyawan extends CI_Controller
     // hapus data karyawan
     public function hapus_karyawan($id)
     {
-        // Dapatkan nama file foto sebelum menghapus data karyawan
         $foto = $this->Model_karyawan->getFotoById($id);
 
-        // Hapus data karyawan
         $this->Model_karyawan->hapusDataKaryawan($id);
 
-        // Hapus file foto dari penyimpanan
         if (!empty($foto)) {
             $pathToFile = './assets/img/upload/' . $foto;
             if (file_exists($pathToFile)) {
                 
-                // Hapus file dari penyimpanan
                 unlink($pathToFile); 
             }
         }
@@ -251,7 +251,8 @@ class Karyawan extends CI_Controller
     }
 
     // server side data karyawan
-    public function getDataKaryawan() {
+    public function getDataKaryawan() 
+    {
         $results = $this->Model_serverside_karyawan->getDataTable();
         $data    = [];
         $no      = $_POST['start'];
@@ -295,7 +296,6 @@ class Karyawan extends CI_Controller
     
             // kondisi untuk memeriksa nilai gaji, jika ada ditampilkan jika tidak ada tidak ditampilkan
             if ($result->gaji !== null) {
-                
                 $countGajiNotNull++; 
     
                 $row   = array();
@@ -419,6 +419,61 @@ class Karyawan extends CI_Controller
         $data['title']    = 'Data Karyawan';
         $data['karyawan'] = $this->Model_karyawan->exportDataKaryawan();
         $this->load->view('excel/data_karyawan', $data);
+    }
+
+    public function getDataFilter($filter_type = null, $filter_value = null)
+    {
+        $results = $this->Model_filterdata->getDataTable($filter_type, $filter_value);
+        $data = [];
+        $no      = $_POST['start'];
+        
+        foreach ($results as $result) {
+            $row   = array();
+            $row[] = '<div class="text-center">' . ++$no . '.</div>';
+            $row[] = '<div class="text-center">' . $result->nama . '</div>';
+            $row[] = '<div class="text-center">' . $result->nik . '</div>';
+            $row[] = '<div class="text-center">' . $result->jenis_kelamin . '</div>';
+            $row[] = '<div class="text-center">' . $result->nama_divisi . '</div>';
+            $row[] = '<div class="text-center">' . $result->nama_unit . '</div>';
+            $row[] = '<div class="text-center"><img src="' . base_url('./assets/img/upload/' . $result->foto) . '" width="100"></div>';
+            $row[] = '<div class="text-center">
+            <a href="'.base_url('karyawan/edit_karyawan/'.$result->id).'" class="btn btn-warning" onclick="return confirm(\'Apakah Anda yakin untuk mengedit data ini?\')"><i class="bi bi-pencil-square"></i></a>
+            <a href="'.base_url('karyawan/hapus_karyawan/'.$result->id).'" class="btn btn-danger" onclick="return confirm(\'Apakah Anda yakin untuk menghapus data ini?\')"><i class="bi bi-trash3-fill"></i></a>
+            </div>';
+            
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw"            => $_POST['draw'],
+            "recordsTotal"    => $this->Model_filterdata->count_all_data(),
+            "recordsFiltered" => $this->Model_filterdata->count_filter_data(),
+            "data"            => $data,
+        );
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($output));
+    }
+
+    // filter data
+    public function filterData()
+    {
+        $filter_type = $this->input->post('filter_type');
+        $filter_value = '';
+
+        if ($filter_type === 'divisi') {
+            $filter_value = $this->input->post('id_divisi');
+            $this->session->set_userdata('filter_divisi', $filter_value);
+
+        } elseif ($filter_type === 'unit') {
+            $filter_value = $this->input->post('id_unit');
+            $this->session->set_userdata('filter_unit', $filter_value);
+            
+        } else {
+            $this->session->unset_userdata('filter_divisi');
+            $this->session->unset_userdata('filter_unit');
+        }
+
+        $this->getDataFilter($filter_type, $filter_value);
     }
 
     // rules tambah data

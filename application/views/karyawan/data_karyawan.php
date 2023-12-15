@@ -19,10 +19,40 @@
     <?= $this->session->flashdata('flash'); ?>
 
     <div class="card">
-        <div class="card-header py-3">
+        <div class="card-header py-3 d-flex align-items-start justify-content-between">
             <a href="<?= base_url('karyawan/tambah_karyawan') ?>" class="btn btn-primary"><i
                     class="bi bi-person-plus-fill"></i>
                 Tambah Data</a>
+
+            <form action="<?= base_url('karyawan/filterData') ?>" class="d-flex align-items-start ml-5"
+                style="gap: 10px;" method="post" id="filterForm">
+                <div class="form-group mb-3">
+                    <select class="form-control" name="filter_type" id="filter_type" required>
+                        <option value="">Pilih</option>
+                        <option value="divisi">Filter Divisi</option>
+                        <option value="unit">Filter Unit</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3" id="filterDivisi" style="display: none;">
+                    <select class="form-control" name="id_divisi" id="id_divisi">
+                        <option value="">Pilih Divisi</option>
+                        <?php foreach ($divisi as $dvs) : ?>
+                        <option value="<?= $dvs['id_divisi'] ?>"><?= $dvs['nama_divisi'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group mb-3" id="filterUnit" style="display: none;">
+                    <select class="form-control" name="id_unit" id="id_unit">
+                        <option value="">Pilih Unit</option>
+                        <?php foreach ($unit as $unt) : ?>
+                        <option value="<?= $unt['id_unit'] ?>"><?= $unt['nama_unit'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+
+
         </div>
         <div class="card-body">
             <table id="data_karyawan" class="table table-striped table-bordered" style="width:100%">

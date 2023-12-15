@@ -74,28 +74,104 @@
 <!-- server side data karyawan -->
 <script>
 $(document).ready(function() {
-    var table = $('#data_karyawan').DataTable({
-        search: {
-            return: true
-        },
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-            "url": "<?= base_url('karyawan/getDataKaryawan'); ?>",
-            "type": "POST"
-        },
-        "aLengthMenu": [
-            [10, 20, 50],
-            [10, 20, 50]
-        ],
-        "columnDefs": [{
-            "target": [-1],
-            "orderable": false
-        }]
+    // data karyawan
+    function showAllData() {
+        var table = $('#data_karyawan').DataTable({
+            search: {
+                return: true
+            },
+            "destroy": true,
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "ajax": {
+                "url": "<?= base_url('karyawan/getDataKaryawan'); ?>",
+                "type": "POST",
+            },
+            "aLengthMenu": [
+                [10, 20, 50],
+                [10, 20, 50]
+            ],
+            "columnDefs": [{
+                "target": [-1],
+                "orderable": false
+            }]
+        });
+    }
+
+    // filter data
+    function filterData(filterType, filterValue) {
+        var table = $('#data_karyawan').DataTable({
+            "destroy": true,
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "ajax": {
+                "url": "<?= base_url('karyawan/filterData'); ?>",
+                "type": "POST",
+                "data": {
+                    filter_type: filterType,
+                    id_divisi: filterType === 'divisi' ? filterValue : null,
+                    id_unit: filterType === 'unit' ? filterValue : null
+                }
+            },
+            "aLengthMenu": [
+                [10, 20, 50],
+                [10, 20, 50]
+            ],
+            "columnDefs": [{
+                "target": [-1],
+                "orderable": false
+            }]
+        });
+    }
+
+    // select kedua
+    function toggleSecondSelect() {
+        var selectedType = $('[name="filter_type"]').val();
+
+        if (selectedType === 'divisi') {
+            $('#filterDivisi').show();
+            $('#filterUnit').hide();
+        } else if (selectedType === 'unit') {
+            $('#filterDivisi').hide();
+            $('#filterUnit').show();
+        } else {
+            $('#filterDivisi').hide();
+            $('#filterUnit').hide();
+        }
+    }
+
+    showAllData();
+    toggleSecondSelect();
+
+    // filter data ketika tombol di klik
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        toggleSecondSelect();
+        var selectedType = $('[name="filter_type"]').val();
+
+        if (selectedType === 'divisi') {
+            var selectedDivision = $('#id_divisi').val();
+            filterData('divisi', selectedDivision);
+
+        } else if (selectedType === 'unit') {
+            var selectedUnit = $('#id_unit').val();
+            filterData('unit', selectedUnit);
+
+        } else {
+            showAllData();
+        }
     });
+
+
+    $('#filter_type').on('change', function() {
+        toggleSecondSelect();
+    });
+
 });
 </script>
+
 
 <!-- server side data gaji karyawan -->
 <script>
