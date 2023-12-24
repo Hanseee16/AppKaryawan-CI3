@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2023 at 06:20 PM
+-- Generation Time: Dec 24, 2023 at 06:18 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -37,8 +37,11 @@ CREATE TABLE `divisi` (
 --
 
 INSERT INTO `divisi` (`id_divisi`, `nama_divisi`) VALUES
-(1, 'Divisi1'),
-(2, 'Divisi2');
+(1, 'Divisi 1'),
+(2, 'Divisi 2'),
+(3, 'Divisi 3'),
+(4, 'Divisi 4'),
+(5, 'Divisi 5');
 
 -- --------------------------------------------------------
 
@@ -62,10 +65,10 @@ CREATE TABLE `karyawan` (
 --
 
 INSERT INTO `karyawan` (`id`, `nama`, `nik`, `jenis_kelamin`, `id_divisi`, `id_unit`, `foto`, `gaji`) VALUES
-(291, 'Farhan Kamil', '20101140', 'Pria', NULL, NULL, NULL, NULL),
-(292, 'Eva Fauziah', '20101141', 'Wanita', NULL, NULL, NULL, NULL),
-(293, 'Dadang ', '20101142', 'Pria', NULL, NULL, NULL, NULL),
-(294, 'Siti Mariyam', '20101143', 'Wanita', NULL, NULL, NULL, NULL);
+(1, 'Farhan Kamil', '20101140', 'Pria', 1, 4, 'images_(1)1.jpg', '2000000'),
+(2, 'Gift Coklat', '20101141', 'Wanita', 2, 3, 'images_(2).jpg', '2500000'),
+(3, 'Bouquet Bunga', '20101142', 'Wanita', 3, 2, 'Untitled_(2).jpg', '3000000'),
+(4, 'anu', '20101143', 'Pria', 4, 1, 'Untitled_(3).jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -83,8 +86,11 @@ CREATE TABLE `unit` (
 --
 
 INSERT INTO `unit` (`id_unit`, `nama_unit`) VALUES
-(1, 'Unit1'),
-(2, 'Unit2');
+(1, 'Unit 1'),
+(2, 'Unit 2'),
+(3, 'Unit 3'),
+(4, 'Unit 4'),
+(5, 'Unit 5');
 
 -- --------------------------------------------------------
 
@@ -146,19 +152,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `divisi`
 --
 ALTER TABLE `divisi`
-  MODIFY `id_divisi` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_divisi` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `unit`
 --
 ALTER TABLE `unit`
-  MODIFY `id_unit` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_unit` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user`

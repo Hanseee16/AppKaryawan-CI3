@@ -168,7 +168,6 @@ $(document).ready(function() {
     $('#filter_type').on('change', function() {
         toggleSecondSelect();
     });
-
 });
 </script>
 

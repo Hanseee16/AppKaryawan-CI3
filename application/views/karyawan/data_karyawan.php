@@ -29,13 +29,13 @@
                 <div class="form-group mb-3">
                     <select class="form-control" name="filter_type" id="filter_type" required>
                         <option value="">Pilih</option>
-                        <option value="divisi">Filter Divisi</option>
-                        <option value="unit">Filter Unit</option>
+                        <option value="divisi">Divisi</option>
+                        <option value="unit">Unit</option>
                     </select>
                 </div>
                 <div class="form-group mb-3" id="filterDivisi" style="display: none;">
                     <select class="form-control" name="id_divisi" id="id_divisi">
-                        <option value="">Pilih Divisi</option>
+                        <option value="">Pilih</option>
                         <?php foreach ($divisi as $dvs) : ?>
                         <option value="<?= $dvs['id_divisi'] ?>"><?= $dvs['nama_divisi'] ?></option>
                         <?php endforeach; ?>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group mb-3" id="filterUnit" style="display: none;">
                     <select class="form-control" name="id_unit" id="id_unit">
-                        <option value="">Pilih Unit</option>
+                        <option value="">Pilih</option>
                         <?php foreach ($unit as $unt) : ?>
                         <option value="<?= $unt['id_unit'] ?>"><?= $unt['nama_unit'] ?></option>
                         <?php endforeach; ?>
@@ -51,7 +51,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Filter</button>
             </form>
-
 
         </div>
         <div class="card-body">
